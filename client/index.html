@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JS/Socket.IO chat</title>
+    <link rel="stylesheet" type="text/css" href="style/main.css">
+
+    <!--<link rel="shortcut icon" href="img/icon.png" type="image/x-icon">-->
+
+    <!--<link rel="stylesheet" type="text/css" href="sass/base/normalize.scss"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="sass/base/grid.scss">-->
+    <!---->
+    <!--<link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+</head>
+<body>
+<ul id="messages"></ul>
+<form action="">
+    <input type="text" id="m" autocomplete="off"/>
+    <button>Send</button>
+</form>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script>
+    var socket = io();
+</script>
+</body>
+</html>

@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var http = require('http');
+var io = require('socket.io')(http);
 
 var app = express();
 var port = '3000';
@@ -15,15 +16,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', function(req, res){
-    res.send('<h1>Graduation project for GeekHub</h1>');
+    res.sendFile(__dirname + '/client/index.html');
 });
 
-// catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//     var err = new Error('Not Found');
-//     err.status = 404;
-//     next(err);
-// });
+io.on('connection', function(socket){
+    console.log('a user connected');
+});
 
 var server = http.createServer(app);
 server.listen(port, function(){
