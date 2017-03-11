@@ -15,6 +15,7 @@ app.set('port', port);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(express.static('./client'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
