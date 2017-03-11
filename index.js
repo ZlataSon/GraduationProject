@@ -1,11 +1,14 @@
 var express = require('express');
+var app = express();
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var http = require('http');
-var io = require('socket.io')(http);
 
-var app = express();
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
 var port = '3000';
 app.set('port', port);
 
@@ -21,9 +24,11 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
     console.log('a user connected');
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
 });
 
-var server = http.createServer(app);
 server.listen(port, function(){
     console.log('listening on *:3000');
 });
