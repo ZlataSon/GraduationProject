@@ -1,5 +1,5 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 // import App from './App';
 
 var App = React.createClass({
@@ -143,11 +143,11 @@ var App = React.createClass({
                         <i className="em em-guitar"> </i>
                         <i className="em em-performing_arts"> </i>
                     </div>
-                    <input type="text" id="message" autocomplete="off"/>
-                    <button onClick={() => self.submitMessage()}>Send</button>
-                    <button className="smile">
+                    <input type="text" id="message" autoComplete="off"/>
+                    <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>Send</a>
+                    <a className="button smile" href="javascript:void(0)" >
                         <i className="em em-yum"> </i>
-                    </button>
+                    </a>
 
                 </footer>
             </div>

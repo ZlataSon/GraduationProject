@@ -70,17 +70,14 @@ footer input {
     border: 0;
     padding: 10px;
     width: calc(95% - 130px);
-    height: 50px;
+    height: 45px;
     margin: 5px 0 5px 10px;
     border-radius: 25px;
 }
 
-footer button {
-    width: 75px;
-}
-
-footer button.smile {
-    width: 75px;
+footer .button {
+    width: 70px;
+    margin: 5px 0 5px 10px;
 }
 
 footer div.smile-box {
@@ -152,14 +149,20 @@ footer div.smile-box i:focus {
 
 button,
 .button {
-    background: rgb(129, 198, 234) url("../img/water.png") no-repeat fixed center center;
+    display: inline-block;
+    background: rgb(129, 198, 234) url(../img/water.png) no-repeat center center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    height: 50px;
+    height: 45px;
     width: auto;
-    padding: 10px;
+    vertical-align: middle;
+    font-size: 20px;
+    text-decoration: none;
     border: 1px transparent;
     border-radius: 50%;
+    color: #000000;
+    line-height: 45px;
+    text-align: center;
 }
