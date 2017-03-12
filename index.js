@@ -26,6 +26,8 @@ var App = React.createClass({
             user: this.state.user || "guest"
         };
         this.state.socket.emit("new-message",message);
+        document.getElementById("message").value = "";
+        return false;
     },
     pickUser: function () {
         var user = document.getElementById('user').value;
@@ -41,13 +43,14 @@ var App = React.createClass({
         });
         return(
             <div className="app">
-                <ul id="messages">{messages}</ul>
-                {/*<form action="">*/}
-                    <input type="text" id="message" autocomplete="off"/>
-                    <button onClick={() => self.submitMessage()}>Send</button>
                 <input type="text" id="user" placeholder="User name"/>
                 <button onClick={()=> self.pickUser()}>Select user</button>
-                {/*</form>*/}
+
+                <ul id="messages">{messages}</ul>
+
+                <input type="text" id="message" autocomplete="off"/>
+                <button onClick={() => self.submitMessage()}>Send</button>
+
             </div>
         )
     }
