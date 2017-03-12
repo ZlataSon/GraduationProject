@@ -1,33 +1,121 @@
+/**==========================================================================*/
+/*Base style */
+/**==========================================================================*/
+
 * {
     margin: 0;
     padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
 }
 
 body {
-    font: 13px Helvetica, Arial;
+    position: relative;
+    font: 12px Arial, Helvetica;
+    margin: 0;
+    background: #ffffff;
 }
 
-form {
-    background: #000;
+
+#submit::-moz-focus-inner {
+    border: none;
+}
+
+input {outline: none;}
+input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 50px #e7e7e7 !important; /* Цвет фона */
+    -webkit-text-fill-color: #999 !important; /* цвет текста */
+    color: #999 !important; /* цвет текста */
+}
+
+.app {
+    width: auto;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/**==========================================================================*/
+/*Header style */
+/**==========================================================================*/
+
+header {
+    background: rgba(0, 0, 0, 0.7);
     padding: 3px;
     position: fixed;
+    height: 60px;
+    top: 0;
+    width: 100%;
+}
+
+/**==========================================================================*/
+/*Footer style */
+/**==========================================================================*/
+
+footer{
+    background: rgba(0, 0, 0, 0.7);
+    padding: 3px;
+    position: fixed;
+    height: 60px;
     bottom: 0;
     width: 100%;
 }
 
-form input {
+footer input {
     border: 0;
     padding: 10px;
-    width: 90%;
-    margin-right: .5%;
+    width: calc(95% - 130px);
+    height: 50px;
+    margin: 5px 0 5px 10px;
+    border-radius: 25px;
 }
 
-form button {
-    width: 9%;
-    background: rgb(130, 224, 255);
-    border: none;
-    padding: 10px;
+footer button {
+    width: 75px;
+}
+
+footer button.smile {
+    width: 75px;
+}
+
+footer div.smile-box {
+    position: absolute;
+    width: 300px;
+    height: 230px;
+    bottom: 60px;
+    right: 30px;
+    border-radius: 25px;
+    padding: 5px 10px;
+    border: 1px solid #999999;
+    background: #ffffff;
+}
+
+footer div.smile-box i {
+    display: inline-block;
+    padding: 3px;
+    margin: 3px;
+}
+
+footer div.smile-box i:hover,
+footer div.smile-box i:focus {
+    opacity: 0.7;
+}
+
+
+/**==========================================================================*/
+/*Page (private and public chat) style */
+/**==========================================================================*/
+
+.app main {
+    height: calc(100vh - 120px);
+    margin: 60px 0;
+    padding: 20px 30px;
+    overflow: auto;
 }
 
 #messages {
@@ -37,9 +125,41 @@ form button {
 }
 
 #messages li {
-    padding: 5px 10px;
+    padding: 15px;
+    color: #ffffff;
+    border-radius: 25px;
+    min-width: 150px;
+    width: auto;
+    max-width: 70%;
+    white-space: normal;
 }
 
 #messages li:nth-child(odd) {
-    background: #eee;
+    background: rgba(12, 13, 55, 0.71);
+}
+
+#messages li:nth-child(even) {
+    background: rgba(0, 85, 101, 0.76);
+}
+
+.public {
+    background: rgb(72, 113, 157) url("../img/chart-bg.jpg") no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+button,
+.button {
+    background: rgb(129, 198, 234) url("../img/water.png") no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 50px;
+    width: auto;
+    padding: 10px;
+    border: 1px transparent;
+    border-radius: 50%;
 }
