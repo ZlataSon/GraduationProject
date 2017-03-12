@@ -15,12 +15,15 @@ app.set('port', port);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(express.static('./client'));
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'client')));
 
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/index.js', function(req, res){
+    res.sendFile(__dirname + '/index.js');
 });
 
 io.on('connection', function(socket){
