@@ -21,8 +21,14 @@ var App = React.createClass({
     },
     submitMessage: function () {
         var body = document.getElementById("message").value;
+        var now = new Date();
+        var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        var formatDate = mS[now.getMonth()] + ", " + now.getDate() + " - " + days[now.getDay()] + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        console.log(formatDate);
         var message = {
             body: body,
+            date: formatDate,
             user: this.state.user || "guest"
         };
         this.state.socket.emit("new-message",message);
@@ -38,14 +44,24 @@ var App = React.createClass({
         console.dir(this.state.messages);
         var messages = this.state.messages.map(function (msg,index) {
             return (
-                <li key={index}><strong>{msg.user}:</strong> <span>{msg.body}</span></li>
+
+                <li key={index}>
+                    <p className="msg-title"><strong>{msg.user}:</strong> <span className="date">{msg.date}</span></p>
+                    <p className="msg-body">
+                        <i className="fa fa-quote-left" aria-hidden="true"> </i>
+                        {msg.body}
+                        <i className="fa fa-quote-right" aria-hidden="true"> </i>
+                    </p>
+                </li>
             )
         });
         return(
             <div className="app public">
                 <header>
                     <input type="text" id="user" placeholder="User name"/>
-                    <button onClick={()=> self.pickUser()}>Select user</button>
+                    <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
+                        <i className="fa fa-floppy-o" aria-hidden="true"> </i>
+                    </a>
                 </header>
 
                 <main>
@@ -144,9 +160,11 @@ var App = React.createClass({
                         <i className="em em-performing_arts"> </i>
                     </div>
                     <input type="text" id="message" autoComplete="off"/>
-                    <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>Send</a>
+                    <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>
+                        <i className="fa fa-paper-plane" aria-hidden="true"> </i>
+                    </a>
                     <a className="button smile" href="javascript:void(0)" >
-                        <i className="em em-yum"> </i>
+                        <i className="fa fa-smile-o" aria-hidden="true"> </i>
                     </a>
 
                 </footer>

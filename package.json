@@ -4,7 +4,8 @@
   "description": "Graduation project for GeekHub",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "prestart": "webpack",
+      "start": "node server.js"
   },
   "repository": {
     "type": "git",

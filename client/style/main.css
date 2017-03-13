@@ -45,25 +45,56 @@ input:-webkit-autofill {
 /**==========================================================================*/
 
 header {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(4, 61, 67, 0.7);
     padding: 3px;
     position: fixed;
     height: 60px;
     top: 0;
     width: 100%;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12);
+    border-radius: 0px;
+    z-index: 1100;
+    display: flex;
+    min-height: 64px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+header input {
+    border: 0;
+    padding: 10px;
+    width: 200px;
+    height: 45px;
+    margin: 5px 0 5px 10px;
+    border-radius: 25px;
 }
 
 /**==========================================================================*/
 /*Footer style */
 /**==========================================================================*/
 
-footer{
-    background: rgba(0, 0, 0, 0.7);
+footer {
+    background: rgba(4, 61, 67, 0.7);
     padding: 3px;
     position: fixed;
     height: 60px;
     bottom: 0;
     width: 100%;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12);
+    border-radius: 0px;
+    z-index: 1100;
+    display: flex;
+    min-height: 64px;
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
 footer input {
@@ -73,11 +104,6 @@ footer input {
     height: 45px;
     margin: 5px 0 5px 10px;
     border-radius: 25px;
-}
-
-footer .button {
-    width: 70px;
-    margin: 5px 0 5px 10px;
 }
 
 footer div.smile-box {
@@ -115,6 +141,24 @@ footer div.smile-box i:focus {
     overflow: auto;
 }
 
+.msg-title {
+    border-bottom: 1px dotted #009ea0;
+    position: relative;
+}
+
+.msg-title strong {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 5px 15px 5px 0;
+}
+
+.msg-title span.date {
+    position: absolute;
+    top: 3px;
+    right: 0;
+}
+
 #messages {
     list-style-type: none;
     margin: 0;
@@ -131,12 +175,26 @@ footer div.smile-box i:focus {
     white-space: normal;
 }
 
+#messages li p {
+    margin: 10px;
+}
+
 #messages li:nth-child(odd) {
     background: rgba(12, 13, 55, 0.71);
 }
 
 #messages li:nth-child(even) {
     background: rgba(0, 85, 101, 0.76);
+}
+
+.msg-body .fa.fa-quote-left {
+    margin: 0 10px 0 0;
+    font-size: 16px;
+}
+
+.msg-body .fa.fa-quote-right {
+    margin: 0 0 0 10px;
+    font-size: 16px;
 }
 
 .public {
@@ -149,20 +207,35 @@ footer div.smile-box i:focus {
 
 button,
 .button {
+    background: #9be2ff;
     display: inline-block;
-    background: rgb(129, 198, 234) url(../img/water.png) no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    height: 45px;
-    width: auto;
     vertical-align: middle;
-    font-size: 20px;
     text-decoration: none;
-    border: 1px transparent;
-    border-radius: 50%;
     color: #000000;
-    line-height: 45px;
+    line-height: 43px;
     text-align: center;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    border: 1px solid #93d6f2;
+}
+
+button .fa,
+.button .fa {
+    font-size: 25px;
+    color: #009ea0;
+    vertical-align: middle;
+}
+
+button:hover,
+button:focus,
+button:active,
+.button:hover,
+.button:focus,
+.button:active {
+    transform: scale(1.1);
+    box-shadow: 0 0 8px 4px #ccc;
 }
