@@ -141,6 +141,24 @@ footer div.smile-box i:focus {
     overflow: auto;
 }
 
+.msg-title {
+    border-bottom: 1px dotted #009ea0;
+    position: relative;
+}
+
+.msg-title strong {
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 5px 15px 5px 0;
+}
+
+.msg-title span.date {
+    position: absolute;
+    top: 3px;
+    right: 0;
+}
+
 #messages {
     list-style-type: none;
     margin: 0;
@@ -157,12 +175,26 @@ footer div.smile-box i:focus {
     white-space: normal;
 }
 
+#messages li p {
+    margin: 10px;
+}
+
 #messages li:nth-child(odd) {
     background: rgba(12, 13, 55, 0.71);
 }
 
 #messages li:nth-child(even) {
     background: rgba(0, 85, 101, 0.76);
+}
+
+.msg-body .fa.fa-quote-left {
+    margin: 0 10px 0 0;
+    font-size: 16px;
+}
+
+.msg-body .fa.fa-quote-right {
+    margin: 0 0 0 10px;
+    font-size: 16px;
 }
 
 .public {

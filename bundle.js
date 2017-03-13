@@ -21709,8 +21709,14 @@ var App = _react2.default.createClass({
     },
     submitMessage: function submitMessage() {
         var body = document.getElementById("message").value;
+        var now = new Date();
+        var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        var formatDate = mS[now.getMonth()] + ", " + now.getDate() + " - " + days[now.getDay()] + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        console.log(formatDate);
         var message = {
             body: body,
+            date: formatDate,
             user: this.state.user || "guest"
         };
         this.state.socket.emit("new-message", message);
@@ -21729,16 +21735,35 @@ var App = _react2.default.createClass({
                 'li',
                 { key: index },
                 _react2.default.createElement(
-                    'strong',
-                    null,
-                    msg.user,
-                    ':'
+                    'p',
+                    { className: 'msg-title' },
+                    _react2.default.createElement(
+                        'strong',
+                        null,
+                        msg.user,
+                        ':'
+                    ),
+                    ' ',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'date' },
+                        msg.date
+                    )
                 ),
-                ' ',
                 _react2.default.createElement(
-                    'span',
-                    null,
-                    msg.body
+                    'p',
+                    { className: 'msg-body' },
+                    _react2.default.createElement(
+                        'i',
+                        { className: 'fa fa-quote-left', 'aria-hidden': 'true' },
+                        ' '
+                    ),
+                    msg.body,
+                    _react2.default.createElement(
+                        'i',
+                        { className: 'fa fa-quote-right', 'aria-hidden': 'true' },
+                        ' '
+                    )
                 )
             );
         });
