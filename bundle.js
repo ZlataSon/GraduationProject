@@ -21750,11 +21750,15 @@ var App = _react2.default.createClass({
                 null,
                 _react2.default.createElement('input', { type: 'text', id: 'user', placeholder: 'User name' }),
                 _react2.default.createElement(
-                    'button',
-                    { onClick: function onClick() {
+                    'a',
+                    { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
                             return self.pickUser();
                         } },
-                    'Select user'
+                    _react2.default.createElement(
+                        'i',
+                        { className: 'fa fa-floppy-o', 'aria-hidden': 'true' },
+                        ' '
+                    )
                 )
             ),
             _react2.default.createElement(
@@ -22192,14 +22196,18 @@ var App = _react2.default.createClass({
                     { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
                             return self.submitMessage();
                         } },
-                    'Send'
+                    _react2.default.createElement(
+                        'i',
+                        { className: 'fa fa-paper-plane', 'aria-hidden': 'true' },
+                        ' '
+                    )
                 ),
                 _react2.default.createElement(
                     'a',
                     { className: 'button smile', href: 'javascript:void(0)' },
                     _react2.default.createElement(
                         'i',
-                        { className: 'em em-yum' },
+                        { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
                         ' '
                     )
                 )

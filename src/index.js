@@ -45,7 +45,9 @@ var App = React.createClass({
             <div className="app public">
                 <header>
                     <input type="text" id="user" placeholder="User name"/>
-                    <button onClick={()=> self.pickUser()}>Select user</button>
+                    <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
+                        <i className="fa fa-floppy-o" aria-hidden="true"> </i>
+                    </a>
                 </header>
 
                 <main>
@@ -144,9 +146,11 @@ var App = React.createClass({
                         <i className="em em-performing_arts"> </i>
                     </div>
                     <input type="text" id="message" autoComplete="off"/>
-                    <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>Send</a>
+                    <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>
+                        <i className="fa fa-paper-plane" aria-hidden="true"> </i>
+                    </a>
                     <a className="button smile" href="javascript:void(0)" >
-                        <i className="em em-yum"> </i>
+                        <i className="fa fa-smile-o" aria-hidden="true"> </i>
                     </a>
 
                 </footer>
