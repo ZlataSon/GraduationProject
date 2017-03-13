@@ -1,2 +1,10 @@
-.idea
-node_modules/
+# WebStorm
+.idea/
+
+# Dependency directory
+node_modules
+
+# Logs
+logs
+*.log
+npm-debug.log*
