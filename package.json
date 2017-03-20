@@ -4,8 +4,8 @@
   "description": "Graduation project for GeekHub",
   "main": "index.js",
   "scripts": {
-      "prestart": "webpack",
-      "start": "node server.js"
+    "prestart": "webpack",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,12 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "material-ui": "^0.17.0",
     "mongodb": "^2.2.24",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-router": "^2.0.0",
+    "react-tap-event-plugin": "^2.0.1",
     "serve-favicon": "^2.4.1",
     "socket.io": "^1.7.3"
   },
