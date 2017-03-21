@@ -45,7 +45,19 @@ var App = React.createClass({
             return (
 
                 <li key={index}>
-                    <p className="msg-title"><strong>{msg.user}:</strong> <span className="date">{msg.date}</span></p>
+                    <p className="msg-title">
+                        <strong>{msg.user}: </strong>
+                        <span>
+                            <a className="button sm-button" href="javascript:void(0)">
+                                <i className="fa fa-weixin" aria-hidden="true"> </i>
+                            </a>
+                            <a className="button sm-button" href="javascript:void(0)">
+                                <i className="fa fa-gamepad" aria-hidden="true"> </i>
+                            </a>
+                        </span>
+                        <span className="date">{msg.date}</span>
+                    </p>
+
                     <p className="msg-body">
                         <i className="fa fa-quote-left" aria-hidden="true"> </i>
                         {msg.body}

@@ -446,15 +446,8 @@ module.exports = reactProdInvariant;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
 
 /* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -475,7 +468,7 @@ function shouldUseNative() {
 		// Detect buggy property enumeration order in older V8 versions.
 
 		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		var test1 = new String('abc');  // eslint-disable-line
 		test1[5] = 'de';
 		if (Object.getOwnPropertyNames(test1)[0] === '5') {
 			return false;
@@ -504,7 +497,7 @@ function shouldUseNative() {
 		}
 
 		return true;
-	} catch (err) {
+	} catch (e) {
 		// We don't expect any of the above to throw, but better to be safe.
 		return false;
 	}
@@ -524,8 +517,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 			}
 		}
 
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
+		if (Object.getOwnPropertySymbols) {
+			symbols = Object.getOwnPropertySymbols(from);
 			for (var i = 0; i < symbols.length; i++) {
 				if (propIsEnumerable.call(from, symbols[i])) {
 					to[symbols[i]] = from[symbols[i]];
@@ -15557,9 +15550,30 @@ var App = _react2.default.createClass({
                         'strong',
                         null,
                         msg.user,
-                        ':'
+                        ': '
                     ),
-                    ' ',
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { className: 'button sm-button', href: 'javascript:void(0)' },
+                            _react2.default.createElement(
+                                'i',
+                                { className: 'fa fa-weixin', 'aria-hidden': 'true' },
+                                ' '
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'a',
+                            { className: 'button sm-button', href: 'javascript:void(0)' },
+                            _react2.default.createElement(
+                                'i',
+                                { className: 'fa fa-gamepad', 'aria-hidden': 'true' },
+                                ' '
+                            )
+                        )
+                    ),
                     _react2.default.createElement(
                         'span',
                         { className: 'date' },
