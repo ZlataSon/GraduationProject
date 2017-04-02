@@ -40,6 +40,16 @@ input:-webkit-autofill {
     position: relative;
 }
 
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+.invisible {
+    visibility: hidden;
+}
+
 /**==========================================================================*/
 /*Header style */
 /**==========================================================================*/

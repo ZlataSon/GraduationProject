@@ -4,6 +4,7 @@ import React from 'react';
 var App = React.createClass({
     getInitialState: function () {
         return {
+            smilebox: false,
             messages: [],
             socket: io('http://localhost:3000'),
             user: undefined
@@ -34,6 +35,20 @@ var App = React.createClass({
         document.getElementById("message").value = "";
         return false;
     },
+    pressIcon: function (icon) {
+        console.dir(icon);
+        let text = document.getElementById("message").value;
+        document.getElementById("message").value = text + ' //'+icon+'// ';
+    },
+    parseText: function (text) {
+        console.log(text);
+        let newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`);
+        console.log(newText);
+        return {__html: newText};
+    },
+    viewSmilebox: function () {
+        this.setState({smilebox: !this.state.smilebox});
+    },
     pickUser: function () {
         var user = document.getElementById('user').value;
         this.setState({user: user});
@@ -58,11 +73,12 @@ var App = React.createClass({
                         <span className="date">{msg.date}</span>
                     </p>
 
-                    <p className="msg-body">
+                    <div className="msg-body">
                         <i className="fa fa-quote-left" aria-hidden="true"> </i>
-                        {msg.body}
+                        {/*{self.parseText(msg.body)}>*/}
+                        <div dangerouslySetInnerHTML={self.parseText(msg.body)} />
                         <i className="fa fa-quote-right" aria-hidden="true"> </i>
-                    </p>
+                    </div>
                 </li>
             )
         });
@@ -80,8 +96,8 @@ var App = React.createClass({
                 </main>
 
                 <footer>
-                    <div className="smile-box">
-                        <i className="em em-eyes"> </i>
+                    <div className={"smile-box "+(this.state.smilebox ? 'show' : 'hide')}>
+                        <i className="em em-eyes" onClick={()=> self.pressIcon("em-eyes")}> </i>
                         <i className="em em-kiss"> </i>
                         <i className="em em---1"> </i>
                         <i className="em em--1"> </i>
@@ -174,7 +190,7 @@ var App = React.createClass({
                     <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>
                         <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                     </a>
-                    <a className="button smile" href="javascript:void(0)" >
+                    <a className="button smile" href="javascript:void(0)" onClick={() => self.viewSmilebox()} >
                         <i className="fa fa-smile-o" aria-hidden="true"> </i>
                     </a>
 
