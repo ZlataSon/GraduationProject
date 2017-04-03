@@ -18,7 +18,16 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'client')));
 
+
 app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/chat', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/game', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
@@ -27,17 +36,18 @@ app.get('/bundle.js', function(req, res){
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
+    //console.log('a user connected');
     socket.on('new-message', function(msg){
         console.log(msg);
         io.emit('receive-message',msg);
     });
-    socket.on('test', function(){
-        console.log('Test message');
-    });
+    // socket.on('test', function(){
+    //     console.log('Test message');
+    // });
     socket.on('disconnect', function(){
-        console.log('user disconnected');
+        //console.log('user disconnected');
     });
+
 });
 
 server.listen(port, function(){

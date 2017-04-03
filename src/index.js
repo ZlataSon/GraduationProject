@@ -1,8 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 
-ReactDOM.render(
-    <App />,
-        document.getElementById('root')
+import App from './App';
+import Home from './Home';
+import Chat from './Chat';
+import Game from './Game';
+
+ReactDOM.render((
+    <Router history={browserHistory}>
+        <Route path="/" component={App}>
+            <IndexRoute component={Home} />
+            <Route path="/chat" component={Chat} />
+            <Route path="/game" component={Game} />
+        </Route>
+    </Router>),
+     document.getElementById('root')
 );

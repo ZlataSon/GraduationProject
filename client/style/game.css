@@ -1,0 +1,281 @@
+/* App style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Lato;
+}
+
+.hidden {
+    display: none;
+}
+
+.app-container {
+    position: relative;
+}
+
+/* Game style */
+.game-container {
+    margin: 0 auto;
+    width: 600px;
+    position: relative;
+    padding: 40px;
+}
+
+.main-pane {
+    width: 600px;
+    height: 407px;
+}
+
+.left-pane {
+    float: left;
+}
+
+.right-pane {
+    float: left;
+    padding: 10px 20px;
+}
+
+.game-board {
+    position: relative;
+    width: 407px;
+    height: 407px;
+}
+
+.game-board .grid {
+    width: 407px;
+    height: 407px;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 28px, #CCC 28px, #CCC 29px), repeating-linear-gradient(-90deg, transparent, transparent 28px,#CCC 28px, #CCC 29px);
+    background-size: 29px 29px;
+    position: absolute;
+}
+
+.target {
+    position: absolute;
+    transition-property: top, left;
+    transition-duration: 0.15s;
+}
+
+.game-board .point-container {
+    position: absolute;
+    width: 407px;
+    height: 407px;
+    background: transparent;
+}
+
+.game-board .point-container .p0 {
+    position: absolute;
+    top: 199px;
+    left: 199px;
+    background-color: #CCCCCC;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.game-board .point-container .p1 {
+    position: absolute;
+    top: 83px;
+    left: 83px;
+    background-color: #CCCCCC;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.game-board .point-container .p2 {
+    position: absolute;
+    top: 83px;
+    left: 315px;
+    background-color: #CCCCCC;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.game-board .point-container .p3 {
+    position: absolute;
+    top: 315px;
+    left: 83px;
+    background-color: #CCCCCC;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.game-board .point-container .p4 {
+    position: absolute;
+    top: 315px;
+    left: 315px;
+    background-color: #CCCCCC;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.game-board .grid-overlay {
+    position: absolute;
+    width: 407px;
+    height: 407px;
+    background: transparent;
+}
+
+.game-board .chess-container {
+    position: absolute;
+    width: 407px;
+    height: 407px;
+    background: transparent;
+}
+
+.game-board .target-container {
+    position: absolute;
+    width: 407px;
+    height: 407px;
+    background: transparent;
+}
+
+.game-board .chess-container .chess {
+    position: absolute;
+    border: 1px solid #000000;
+    border-radius: 50%;
+}
+
+.chess-black {
+    background-color: #000000;
+}
+
+.chess-black.last:after {
+    position: absolute;
+    content: '+';
+    color: #FFFFFF;
+    top: 3px;
+    left: 9px;
+}
+
+.chess-white {
+    background-color: #FFFFFF;
+}
+
+.chess-white.last:after {
+    position: absolute;
+    content: '+';
+    color: #000000;
+    top: 3px;
+    left: 9px;
+}
+
+ul {
+    list-style: none;
+}
+
+ul.players-pane {
+    height: 68px;
+}
+
+li.player {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.chess-color {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #000000;
+    border-radius: 50%;
+}
+
+.player-name {
+    margin-left: 10px;
+}
+
+.watchers-pane {
+    margin: 10px 0px;
+    height: 260px;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+li.watcher {
+    margin-top: 4px;
+    padding-left: 10px;
+}
+
+.watcher-name {
+    font-size: 12px;
+    color: #333333;
+}
+
+.button-group {
+    padding: 20px;
+}
+
+/* Home style   */
+
+.home-container {
+    margin: 0 auto;
+    overflow: hidden;
+    margin-top: 50px;
+    padding-left: 20px;
+    width: 256px;
+    box-shadow: inset 6px 0px 10px -10px;
+}
+
+.home-container .options {
+    margin-top: 20px;
+}
+
+.chess-option-tip {
+    color: #00BCD4;
+    margin-bottom: 15px;
+}
+
+.chess-white {
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+}
+
+.chess-black {
+    border: 1px solid #000000;
+    background-color: #000000;
+}
+
+.chess-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin: 15px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+.chess-btn:enabled:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 0px 8px 4px #CCCCCC;
+}
+
+.chess-btn:focus {
+    outline: none;
+}
+
+.chess-btn:disabled {
+    border: 1px solid #CCCCCC;
+    background-color: #CCCCCC;
+    cursor: default;
+}
+
+.loading-info {
+    display: flex;
+    align-items: center;
+}
+
+.online-status {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.online-status p {
+    padding: 5px;
+    font-size: 12px;
+}

@@ -40,6 +40,16 @@ input:-webkit-autofill {
     position: relative;
 }
 
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+.invisible {
+    visibility: hidden;
+}
+
 /**==========================================================================*/
 /*Header style */
 /**==========================================================================*/
@@ -223,6 +233,12 @@ button,
     border: 1px solid #93d6f2;
 }
 
+.button.sm-button .fa {
+    font-size: 20px;
+    line-height: 30px;
+    padding-bottom: 5px;
+}
+
 button .fa,
 .button .fa {
     font-size: 25px;
@@ -238,4 +254,8 @@ button:active,
 .button:active {
     transform: scale(1.1);
     box-shadow: 0 0 8px 4px #ccc;
+}
+
+.button.sm-button .fa {
+    font-size: 18px;
 }
