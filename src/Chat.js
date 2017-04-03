@@ -1,12 +1,13 @@
 import React from 'react';
 // import 'https://afeld.github.io/emoji-css/emoji.css';
 
-var App = React.createClass({
+var Chat = React.createClass({
     getInitialState: function () {
+
         return {
             smilebox: false,
             messages: [],
-            socket: io('http://localhost:3000'),
+            socket: this.props.socket,//io('http://localhost:3000'),
             user: undefined
         }
     },
@@ -53,6 +54,9 @@ var App = React.createClass({
         var user = document.getElementById('user').value;
         this.setState({user: user});
     },
+    playGame: function () {
+
+    },
     render: function () {
         var self = this;
         console.dir(this.state.messages);
@@ -66,7 +70,7 @@ var App = React.createClass({
                             <a className="button sm-button" href="javascript:void(0)">
                                 <i className="fa fa-weixin" aria-hidden="true"> </i>
                             </a>
-                            <a className="button sm-button" href="javascript:void(0)">
+                            <a className="button sm-button" href="/game" >
                                 <i className="fa fa-gamepad" aria-hidden="true"> </i>
                             </a>
                         </span>
@@ -200,4 +204,4 @@ var App = React.createClass({
     }
 });
 
-export default App;
+export default Chat;

@@ -446,8 +446,15 @@ module.exports = reactProdInvariant;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
 
 /* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -468,7 +475,7 @@ function shouldUseNative() {
 		// Detect buggy property enumeration order in older V8 versions.
 
 		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 		test1[5] = 'de';
 		if (Object.getOwnPropertyNames(test1)[0] === '5') {
 			return false;
@@ -497,7 +504,7 @@ function shouldUseNative() {
 		}
 
 		return true;
-	} catch (e) {
+	} catch (err) {
 		// We don't expect any of the above to throw, but better to be safe.
 		return false;
 	}
@@ -517,8 +524,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 			}
 		}
 
-		if (Object.getOwnPropertySymbols) {
-			symbols = Object.getOwnPropertySymbols(from);
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
 			for (var i = 0; i < symbols.length; i++) {
 				if (propIsEnumerable.call(from, symbols[i])) {
 					to[symbols[i]] = from[symbols[i]];
@@ -15451,24 +15458,53 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var App = function (_Component) {
     _inherits(App, _Component);
 
-    function App() {
+    function App(props) {
         _classCallCheck(this, App);
 
-        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
     }
 
     _createClass(App, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.socket = io('http://localhost:3000');
+            //this.socket.on('connect', this.connect.bind(this));
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            //this.socket.off('connect');
+        }
+    }, {
+        key: 'getCurrentUser',
+        value: function getCurrentUser() {
+            var socketId = this.socket.id;
+        }
+    }, {
+        key: 'emit',
+        value: function emit(eventName, payload) {
+            this.socket.emit(eventName, payload);
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
+            var children = this.props.children;
+
+
+            var childrenWithProps = _react2.default.Children.map(children, function (child) {
+                return _react2.default.cloneElement(child, {
+                    emit: _this2.emit.bind(_this2),
+                    user: _this2.getCurrentUser(),
+                    socket: _this2.socket
+                });
+            });
+
             return _react2.default.createElement(
                 'div',
                 { className: 'container' },
-                _react2.default.createElement(
-                    'p',
-                    null,
-                    'Main page'
-                ),
-                this.props.children
+                childrenWithProps
             );
         }
     }]);
@@ -15497,13 +15533,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // import 'https://afeld.github.io/emoji-css/emoji.css';
 
-var App = _react2.default.createClass({
-    displayName: 'App',
+var Chat = _react2.default.createClass({
+    displayName: "Chat",
 
     getInitialState: function getInitialState() {
+
         return {
+            smilebox: false,
             messages: [],
-            socket: io('http://localhost:3000'),
+            socket: this.props.socket, //io('http://localhost:3000'),
             user: undefined
         };
     },
@@ -15532,538 +15570,557 @@ var App = _react2.default.createClass({
         document.getElementById("message").value = "";
         return false;
     },
+    pressIcon: function pressIcon(icon) {
+        console.dir(icon);
+        var text = document.getElementById("message").value;
+        document.getElementById("message").value = text + ' //' + icon + '// ';
+    },
+    parseText: function parseText(text) {
+        console.log(text);
+        var newText = text.replace(new RegExp('//em-eyes//', 'g'), "<i class='em em-eyes'> </i>");
+        console.log(newText);
+        return { __html: newText };
+    },
+    viewSmilebox: function viewSmilebox() {
+        this.setState({ smilebox: !this.state.smilebox });
+    },
     pickUser: function pickUser() {
         var user = document.getElementById('user').value;
         this.setState({ user: user });
     },
+    playGame: function playGame() {},
     render: function render() {
         var self = this;
         console.dir(this.state.messages);
         var messages = this.state.messages.map(function (msg, index) {
             return _react2.default.createElement(
-                'li',
+                "li",
                 { key: index },
                 _react2.default.createElement(
-                    'p',
-                    { className: 'msg-title' },
+                    "p",
+                    { className: "msg-title" },
                     _react2.default.createElement(
-                        'strong',
+                        "strong",
                         null,
                         msg.user,
-                        ': '
+                        ": "
                     ),
                     _react2.default.createElement(
-                        'span',
+                        "span",
                         null,
                         _react2.default.createElement(
-                            'a',
-                            { className: 'button sm-button', href: 'javascript:void(0)' },
+                            "a",
+                            { className: "button sm-button", href: "javascript:void(0)" },
                             _react2.default.createElement(
-                                'i',
-                                { className: 'fa fa-weixin', 'aria-hidden': 'true' },
-                                ' '
+                                "i",
+                                { className: "fa fa-weixin", "aria-hidden": "true" },
+                                " "
                             )
                         ),
                         _react2.default.createElement(
-                            'a',
-                            { className: 'button sm-button', href: 'javascript:void(0)' },
+                            "a",
+                            { className: "button sm-button", href: "/game" },
                             _react2.default.createElement(
-                                'i',
-                                { className: 'fa fa-gamepad', 'aria-hidden': 'true' },
-                                ' '
+                                "i",
+                                { className: "fa fa-gamepad", "aria-hidden": "true" },
+                                " "
                             )
                         )
                     ),
                     _react2.default.createElement(
-                        'span',
-                        { className: 'date' },
+                        "span",
+                        { className: "date" },
                         msg.date
                     )
                 ),
                 _react2.default.createElement(
-                    'p',
-                    { className: 'msg-body' },
+                    "div",
+                    { className: "msg-body" },
                     _react2.default.createElement(
-                        'i',
-                        { className: 'fa fa-quote-left', 'aria-hidden': 'true' },
-                        ' '
+                        "i",
+                        { className: "fa fa-quote-left", "aria-hidden": "true" },
+                        " "
                     ),
-                    msg.body,
+                    _react2.default.createElement("div", { dangerouslySetInnerHTML: self.parseText(msg.body) }),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'fa fa-quote-right', 'aria-hidden': 'true' },
-                        ' '
+                        "i",
+                        { className: "fa fa-quote-right", "aria-hidden": "true" },
+                        " "
                     )
                 )
             );
         });
         return _react2.default.createElement(
-            'div',
-            { className: 'app public' },
+            "div",
+            { className: "app public" },
             _react2.default.createElement(
-                'header',
+                "header",
                 null,
-                _react2.default.createElement('input', { type: 'text', id: 'user', placeholder: 'User name' }),
+                _react2.default.createElement("input", { type: "text", id: "user", placeholder: "User name" }),
                 _react2.default.createElement(
-                    'a',
-                    { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
+                    "a",
+                    { className: "button", href: "javascript:void(0)", onClick: function onClick() {
                             return self.pickUser();
                         } },
                     _react2.default.createElement(
-                        'i',
-                        { className: 'fa fa-floppy-o', 'aria-hidden': 'true' },
-                        ' '
+                        "i",
+                        { className: "fa fa-floppy-o", "aria-hidden": "true" },
+                        " "
                     )
                 )
             ),
             _react2.default.createElement(
-                'main',
+                "main",
                 null,
                 _react2.default.createElement(
-                    'ul',
-                    { id: 'messages' },
+                    "ul",
+                    { id: "messages" },
                     messages
                 )
             ),
             _react2.default.createElement(
-                'footer',
+                "footer",
                 null,
                 _react2.default.createElement(
-                    'div',
-                    { className: 'smile-box' },
+                    "div",
+                    { className: "smile-box " + (this.state.smilebox ? 'show' : 'hide') },
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-eyes' },
-                        ' '
+                        "i",
+                        { className: "em em-eyes", onClick: function onClick() {
+                                return self.pressIcon("em-eyes");
+                            } },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-kiss' },
-                        ' '
+                        "i",
+                        { className: "em em-kiss" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em---1' },
-                        ' '
+                        "i",
+                        { className: "em em---1" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em--1' },
-                        ' '
+                        "i",
+                        { className: "em em--1" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-hand' },
-                        ' '
+                        "i",
+                        { className: "em em-hand" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-clap' },
-                        ' '
+                        "i",
+                        { className: "em em-clap" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-facepunch' },
-                        ' '
+                        "i",
+                        { className: "em em-facepunch" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-blue_heart' },
-                        ' '
+                        "i",
+                        { className: "em em-blue_heart" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-broken_heart' },
-                        ' '
+                        "i",
+                        { className: "em em-broken_heart" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-gift_heart' },
-                        ' '
+                        "i",
+                        { className: "em em-gift_heart" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-revolving_hearts' },
-                        ' '
+                        "i",
+                        { className: "em em-revolving_hearts" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-cupid' },
-                        ' '
+                        "i",
+                        { className: "em em-cupid" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-four_leaf_clover' },
-                        ' '
+                        "i",
+                        { className: "em em-four_leaf_clover" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-love_letter' },
-                        ' '
+                        "i",
+                        { className: "em em-love_letter" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-lipstick' },
-                        ' '
+                        "i",
+                        { className: "em em-lipstick" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-underage' },
-                        ' '
+                        "i",
+                        { className: "em em-underage" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-zzz' },
-                        ' '
+                        "i",
+                        { className: "em em-zzz" },
+                        " "
                     ),
-                    _react2.default.createElement('hr', null),
+                    _react2.default.createElement("hr", null),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-grinning' },
-                        ' '
+                        "i",
+                        { className: "em em-grinning" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-yum' },
-                        ' '
+                        "i",
+                        { className: "em em-yum" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-sunglasses' },
-                        ' '
+                        "i",
+                        { className: "em em-sunglasses" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-blush' },
-                        ' '
+                        "i",
+                        { className: "em em-blush" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-flushed' },
-                        ' '
+                        "i",
+                        { className: "em em-flushed" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-heart_eyes' },
-                        ' '
+                        "i",
+                        { className: "em em-heart_eyes" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-kissing_closed_eyes' },
-                        ' '
+                        "i",
+                        { className: "em em-kissing_closed_eyes" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-pensive' },
-                        ' '
+                        "i",
+                        { className: "em em-pensive" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-angry' },
-                        ' '
+                        "i",
+                        { className: "em em-angry" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-joy' },
-                        ' '
+                        "i",
+                        { className: "em em-joy" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-anguished' },
-                        ' '
+                        "i",
+                        { className: "em em-anguished" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-sweat' },
-                        ' '
+                        "i",
+                        { className: "em em-sweat" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-stuck_out_tongue' },
-                        ' '
+                        "i",
+                        { className: "em em-stuck_out_tongue" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-astonished' },
-                        ' '
+                        "i",
+                        { className: "em em-astonished" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-cold_sweat' },
-                        ' '
+                        "i",
+                        { className: "em em-cold_sweat" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-scream' },
-                        ' '
+                        "i",
+                        { className: "em em-scream" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-confused' },
-                        ' '
+                        "i",
+                        { className: "em em-confused" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-innocent' },
-                        ' '
+                        "i",
+                        { className: "em em-innocent" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-confounded' },
-                        ' '
+                        "i",
+                        { className: "em em-confounded" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-cry' },
-                        ' '
+                        "i",
+                        { className: "em em-cry" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-sleeping' },
-                        ' '
+                        "i",
+                        { className: "em em-sleeping" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-fearful' },
-                        ' '
+                        "i",
+                        { className: "em em-fearful" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-dizzy_face' },
-                        ' '
+                        "i",
+                        { className: "em em-dizzy_face" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-disappointed' },
-                        ' '
+                        "i",
+                        { className: "em em-disappointed" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-disappointed_relieved' },
-                        ' '
+                        "i",
+                        { className: "em em-disappointed_relieved" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-expressionless' },
-                        ' '
+                        "i",
+                        { className: "em em-expressionless" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-smiling_imp' },
-                        ' '
+                        "i",
+                        { className: "em em-smiling_imp" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-triumph' },
-                        ' '
+                        "i",
+                        { className: "em em-triumph" },
+                        " "
                     ),
-                    _react2.default.createElement('hr', null),
+                    _react2.default.createElement("hr", null),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-birthday' },
-                        ' '
+                        "i",
+                        { className: "em em-birthday" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-bouquet' },
-                        ' '
+                        "i",
+                        { className: "em em-bouquet" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-cherry_blossom' },
-                        ' '
+                        "i",
+                        { className: "em em-cherry_blossom" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-candy' },
-                        ' '
+                        "i",
+                        { className: "em em-candy" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-beers' },
-                        ' '
+                        "i",
+                        { className: "em em-beers" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-coffee' },
-                        ' '
+                        "i",
+                        { className: "em em-coffee" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-rose' },
-                        ' '
+                        "i",
+                        { className: "em em-rose" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-hamburger' },
-                        ' '
+                        "i",
+                        { className: "em em-hamburger" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-christmas_tree' },
-                        ' '
+                        "i",
+                        { className: "em em-christmas_tree" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-gem' },
-                        ' '
+                        "i",
+                        { className: "em em-gem" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-strawberry' },
-                        ' '
+                        "i",
+                        { className: "em em-strawberry" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-peach' },
-                        ' '
+                        "i",
+                        { className: "em em-peach" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-stew' },
-                        ' '
+                        "i",
+                        { className: "em em-stew" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-tropical_drink' },
-                        ' '
+                        "i",
+                        { className: "em em-tropical_drink" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-wine_glass' },
-                        ' '
+                        "i",
+                        { className: "em em-wine_glass" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-shaved_ice' },
-                        ' '
+                        "i",
+                        { className: "em em-shaved_ice" },
+                        " "
                     ),
-                    _react2.default.createElement('hr', null),
+                    _react2.default.createElement("hr", null),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-partly_sunny' },
-                        ' '
+                        "i",
+                        { className: "em em-partly_sunny" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-palm_tree' },
-                        ' '
+                        "i",
+                        { className: "em em-palm_tree" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-snowflake' },
-                        ' '
+                        "i",
+                        { className: "em em-snowflake" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-umbrella' },
-                        ' '
+                        "i",
+                        { className: "em em-umbrella" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-art' },
-                        ' '
+                        "i",
+                        { className: "em em-art" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-basketball' },
-                        ' '
+                        "i",
+                        { className: "em em-basketball" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-bike' },
-                        ' '
+                        "i",
+                        { className: "em em-bike" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-soccer' },
-                        ' '
+                        "i",
+                        { className: "em em-soccer" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-bikini' },
-                        ' '
+                        "i",
+                        { className: "em em-bikini" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-boat' },
-                        ' '
+                        "i",
+                        { className: "em em-boat" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-swimmer' },
-                        ' '
+                        "i",
+                        { className: "em em-swimmer" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-books' },
-                        ' '
+                        "i",
+                        { className: "em em-books" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-briefcase' },
-                        ' '
+                        "i",
+                        { className: "em em-briefcase" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-shower' },
-                        '  '
+                        "i",
+                        { className: "em em-shower" },
+                        "  "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-cat2' },
-                        ' '
+                        "i",
+                        { className: "em em-cat2" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-circus_tent' },
-                        ' '
+                        "i",
+                        { className: "em em-circus_tent" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-computer' },
-                        ' '
+                        "i",
+                        { className: "em em-computer" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-crystal_ball' },
-                        ' '
+                        "i",
+                        { className: "em em-crystal_ball" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-fishing_pole_and_fish' },
-                        ' '
+                        "i",
+                        { className: "em em-fishing_pole_and_fish" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-guitar' },
-                        ' '
+                        "i",
+                        { className: "em em-guitar" },
+                        " "
                     ),
                     _react2.default.createElement(
-                        'i',
-                        { className: 'em em-performing_arts' },
-                        ' '
+                        "i",
+                        { className: "em em-performing_arts" },
+                        " "
                     )
                 ),
-                _react2.default.createElement('input', { type: 'text', id: 'message', autoComplete: 'off' }),
+                _react2.default.createElement("input", { type: "text", id: "message", autoComplete: "off" }),
                 _react2.default.createElement(
-                    'a',
-                    { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
+                    "a",
+                    { className: "button", href: "javascript:void(0)", onClick: function onClick() {
                             return self.submitMessage();
                         } },
                     _react2.default.createElement(
-                        'i',
-                        { className: 'fa fa-paper-plane', 'aria-hidden': 'true' },
-                        ' '
+                        "i",
+                        { className: "fa fa-paper-plane", "aria-hidden": "true" },
+                        " "
                     )
                 ),
                 _react2.default.createElement(
-                    'a',
-                    { className: 'button smile', href: 'javascript:void(0)' },
+                    "a",
+                    { className: "button smile", href: "javascript:void(0)", onClick: function onClick() {
+                            return self.viewSmilebox();
+                        } },
                     _react2.default.createElement(
-                        'i',
-                        { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
-                        ' '
+                        "i",
+                        { className: "fa fa-smile-o", "aria-hidden": "true" },
+                        " "
                     )
                 )
             )
@@ -16071,7 +16128,7 @@ var App = _react2.default.createClass({
     }
 });
 
-exports.default = App;
+exports.default = Chat;
 
 /***/ }),
 /* 192 */
