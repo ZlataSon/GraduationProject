@@ -65,6 +65,7 @@ var Chat = React.createClass({
 
                 <li key={index}>
                     <p className="msg-title">
+                        <img src="../img/girl_icon_chart.png" alt=""/>
                         <strong>{msg.user}: </strong>
                         <span>
                             <a className="button sm-button" href="javascript:void(0)">
@@ -91,7 +92,8 @@ var Chat = React.createClass({
                 <header>
                     <input type="text" id="user" placeholder="User name"/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
-                        <i className="fa fa-floppy-o" aria-hidden="true"> </i>
+                        <i className="fa fa-pencil" aria-hidden="true"> </i>
+                        {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}
                     </a>
                 </header>
 
