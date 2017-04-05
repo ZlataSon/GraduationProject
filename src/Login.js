@@ -14,9 +14,7 @@ export default class Login extends Component {
                     </h3>
 
                     <div className="login-form">
-                        <input type="text" placeholder="Enter your nickname"/>
-
-                        {/*<input type="text" placeholder="Enter your age"/>*/}
+                        <input type="text" placeholder="Enter nickname and age"/>
 
                         <div id="mainselection">
                             <select>

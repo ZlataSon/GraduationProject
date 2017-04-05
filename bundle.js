@@ -15592,6 +15592,7 @@ var Chat = _react2.default.createClass({
                 _react2.default.createElement(
                     "p",
                     { className: "msg-title" },
+                    _react2.default.createElement("img", { src: "../img/girl_icon_chart.png", alt: "" }),
                     _react2.default.createElement(
                         "strong",
                         null,
@@ -15657,7 +15658,7 @@ var Chat = _react2.default.createClass({
                         } },
                     _react2.default.createElement(
                         "i",
-                        { className: "fa fa-floppy-o", "aria-hidden": "true" },
+                        { className: "fa fa-pencil", "aria-hidden": "true" },
                         " "
                     )
                 )
@@ -16445,7 +16446,7 @@ var Login = function (_Component) {
                     _react2.default.createElement(
                         "div",
                         { className: "login-form" },
-                        _react2.default.createElement("input", { type: "text", placeholder: "Enter your nickname" }),
+                        _react2.default.createElement("input", { type: "text", placeholder: "Enter nickname and age" }),
                         _react2.default.createElement(
                             "div",
                             { id: "mainselection" },
