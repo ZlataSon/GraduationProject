@@ -1,6 +1,24 @@
 import React, { Component } from 'react'
+import {browserHistory} from 'react-router';
 
 export default class Login extends Component {
+    constructor(props) {
+        super(props);
+
+        this.login = this.login.bind(this);
+    }
+
+    login() {
+        const {emit} = this.props;
+        if (emit) {
+            emit('join', {
+                name: this.refs.refName.value,
+                sex: this.refs.refSex.value
+            });
+        }
+        browserHistory.push('chat');
+    }
+
     render() {
         return (
             <main className="login">
@@ -14,17 +32,19 @@ export default class Login extends Component {
                     </h3>
 
                     <div className="login-form">
-                        <input type="text" placeholder="Enter nickname and age"/>
+                        <input type="text" ref="refName" placeholder="Enter nickname and age"/>
+
+                        {/*<input type="text" placeholder="Enter your age"/>*/}
 
                         <div id="mainselection">
-                            <select>
+                            <select ref="refSex">
                                 <option>&#9794; Male or &#9792; Female</option>
                                 <option>&#9794; Male</option>
                                 <option>&#9792; Female</option>
                             </select>
                         </div>
 
-                        <button>Log In</button>
+                        <button onClick={this.login}>Log In</button>
                     </div>
 
                 </aside>
