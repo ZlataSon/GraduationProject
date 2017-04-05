@@ -1,0 +1,133 @@
+/**==========================================================================*/
+/*Login style */
+/**==========================================================================*/
+
+main.login {
+    width: 100vw;
+    height: 100vh;
+    background: url("../img/login-bg.jpg") no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow: hidden;
+    position: relative;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+main.login h1 {
+    font-family: 'Spirax', cursive;
+    font-size: 35px;
+    color: #ffffff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+    padding: 25px 0 5px;
+    text-align: center;
+}
+
+main.login h3 {
+    font-family: 'Spirax', cursive;
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 1px;
+    text-decoration: none;
+    padding: 10px;
+}
+
+main.login h3 a {
+    font-family: 'Spirax', cursive;
+    font-size: 18px;
+    color: #ffffff;
+    padding: 0 10px;
+    letter-spacing: 2px;
+    text-decoration: none;
+}
+
+main.login h3 a:hover,
+main.login h3 a:focus {
+    color: #b5dcff;
+    text-decoration: none;
+}
+
+main.login p.description {
+    font-family: 'Spirax', cursive;
+    color: #ffffff;
+    letter-spacing: 2px;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 0 10px;
+}
+
+main.login aside {
+    width: 300px;
+    height: 100%;
+    padding: 50px 15px;
+    background: rgba(5, 41, 255, 0.5);
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+}
+
+main.login section {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100vw - 310px);
+    height: 100%;
+    background: url("../img/chats.jpg") no-repeat center center;
+    -webkit-background-size: 85%;
+    -moz-background-size: 85%;
+    -o-background-size: 85%;
+    background-size: 85%;
+    opacity: 0.7;
+}
+
+.login-form {
+    padding: 20px 10px;
+}
+
+.login-form input,
+.login-form button {
+    width: 250px;
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+    border: 1px solid #9bc0ff;
+    box-shadow: 1px 1px 11px #9bc0ff;
+    color: #2d5a80;
+    background: rgb(173, 193, 255);
+    margin: 10px 0;
+    font-size: 17px;
+    padding: 5px 10px;
+}
+
+.login-form button {
+    line-height: 1;
+    font-weight: 900;
+}
+
+#mainselection select {
+    border: 0;
+    color: #2d5a80;
+    background: transparent;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 5px 10px;
+    width: 250px;
+    *width: 230px;
+    *background: rgb(173, 193, 255);
+    -webkit-appearance: none;
+}
+
+#mainselection {
+    overflow:hidden;
+    width: 250px;
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+    box-shadow: 1px 1px 11px #9bc0ff;
+    background: rgb(173, 193, 255) url("http://i62.tinypic.com/15xvbd5.png") no-repeat scroll 218px center;
+    margin: 10px 0;
+}

@@ -446,15 +446,8 @@ module.exports = reactProdInvariant;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
 
 /* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -475,7 +468,7 @@ function shouldUseNative() {
 		// Detect buggy property enumeration order in older V8 versions.
 
 		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		var test1 = new String('abc');  // eslint-disable-line
 		test1[5] = 'de';
 		if (Object.getOwnPropertyNames(test1)[0] === '5') {
 			return false;
@@ -504,7 +497,7 @@ function shouldUseNative() {
 		}
 
 		return true;
-	} catch (err) {
+	} catch (e) {
 		// We don't expect any of the above to throw, but better to be safe.
 		return false;
 	}
@@ -524,8 +517,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 			}
 		}
 
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
+		if (Object.getOwnPropertySymbols) {
+			symbols = Object.getOwnPropertySymbols(from);
 			for (var i = 0; i < symbols.length; i++) {
 				if (propIsEnumerable.call(from, symbols[i])) {
 					to[symbols[i]] = from[symbols[i]];
@@ -16401,34 +16394,101 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Home = function (_Component) {
-    _inherits(Home, _Component);
+var Login = function (_Component) {
+    _inherits(Login, _Component);
 
-    function Home() {
-        _classCallCheck(this, Home);
+    function Login() {
+        _classCallCheck(this, Login);
 
-        return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Login.__proto__ || Object.getPrototypeOf(Login)).apply(this, arguments));
     }
 
-    _createClass(Home, [{
-        key: 'render',
+    _createClass(Login, [{
+        key: "render",
         value: function render() {
             return _react2.default.createElement(
-                'div',
-                { className: 'row' },
+                "main",
+                { className: "login" },
                 _react2.default.createElement(
-                    'div',
-                    { className: 'col-md-12' },
-                    'Home page'
+                    "aside",
+                    null,
+                    _react2.default.createElement(
+                        "h1",
+                        null,
+                        "Water chat"
+                    ),
+                    _react2.default.createElement(
+                        "p",
+                        { className: "description" },
+                        "-  online speaking chat with game \"Five in line\""
+                    ),
+                    _react2.default.createElement(
+                        "h3",
+                        null,
+                        "By",
+                        _react2.default.createElement(
+                            "a",
+                            { href: "https://github.com/ZlataSon" },
+                            "Zlata Son"
+                        ),
+                        _react2.default.createElement(
+                            "span",
+                            null,
+                            " & "
+                        ),
+                        _react2.default.createElement(
+                            "a",
+                            { href: "https://github.com/EvgenSalyakin" },
+                            "Evgen S."
+                        )
+                    ),
+                    _react2.default.createElement(
+                        "div",
+                        { className: "login-form" },
+                        _react2.default.createElement("input", { type: "text", placeholder: "Enter your nickname" }),
+                        _react2.default.createElement(
+                            "div",
+                            { id: "mainselection" },
+                            _react2.default.createElement(
+                                "select",
+                                null,
+                                _react2.default.createElement(
+                                    "option",
+                                    null,
+                                    "\u2642 Male or \u2640 Female"
+                                ),
+                                _react2.default.createElement(
+                                    "option",
+                                    null,
+                                    "\u2642 Male"
+                                ),
+                                _react2.default.createElement(
+                                    "option",
+                                    null,
+                                    "\u2640 Female"
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "button",
+                            null,
+                            "Log In"
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "section",
+                    null,
+                    " "
                 )
             );
         }
     }]);
 
-    return Home;
+    return Login;
 }(_react.Component);
 
-exports.default = Home;
+exports.default = Login;
 
 /***/ }),
 /* 194 */
@@ -40040,9 +40100,9 @@ var _App = __webpack_require__(190);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _Home = __webpack_require__(193);
+var _Login = __webpack_require__(193);
 
-var _Home2 = _interopRequireDefault(_Home);
+var _Login2 = _interopRequireDefault(_Login);
 
 var _Chat = __webpack_require__(191);
 
@@ -40060,7 +40120,7 @@ _reactDom2.default.render(_react2.default.createElement(
     _react2.default.createElement(
         _reactRouter.Route,
         { path: '/', component: _App2.default },
-        _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
+        _react2.default.createElement(_reactRouter.IndexRoute, { component: _Login2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/chat', component: _Chat2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/game', component: _Game2.default })
     )
