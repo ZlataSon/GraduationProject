@@ -7,14 +7,13 @@ var Chat = React.createClass({
         return {
             smilebox: false,
             messages: [],
-            socket: this.props.socket,//io('http://localhost:3000'),
+            socket: this.props.socket,
             user: undefined
         }
     },
     componentDidMount: function () {
         var self = this;
         this.state.socket.on("receive-message", function (msg) {
-            //console.log(msg);
             var messages = self.state.messages;
             messages.push(msg);
             self.setState({messages: messages})
@@ -26,7 +25,6 @@ var Chat = React.createClass({
         var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
         var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         var formatDate = mS[now.getMonth()] + ", " + now.getDate() + " - " + days[now.getDay()] + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-        console.log(formatDate);
         var message = {
             body: body,
             date: formatDate,
@@ -37,14 +35,11 @@ var Chat = React.createClass({
         return false;
     },
     pressIcon: function (icon) {
-        console.dir(icon);
         let text = document.getElementById("message").value;
         document.getElementById("message").value = text + ' //'+icon+'// ';
     },
     parseText: function (text) {
-        console.log(text);
         let newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`);
-        console.log(newText);
         return {__html: newText};
     },
     viewSmilebox: function () {
@@ -59,12 +54,12 @@ var Chat = React.createClass({
     },
     render: function () {
         var self = this;
-        console.dir(this.state.messages);
         var messages = this.state.messages.map(function (msg,index) {
             return (
 
                 <li key={index}>
                     <p className="msg-title">
+                        <img src="../img/girl_icon_chart.png" alt=""/>
                         <strong>{msg.user}: </strong>
                         <span>
                             <a className="button sm-button" href="javascript:void(0)">
@@ -91,7 +86,8 @@ var Chat = React.createClass({
                 <header>
                     <input type="text" id="user" placeholder="User name"/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
-                        <i className="fa fa-floppy-o" aria-hidden="true"> </i>
+                        <i className="fa fa-pencil" aria-hidden="true"> </i>
+                        {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}
                     </a>
                 </header>
 
