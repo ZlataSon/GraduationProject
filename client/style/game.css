@@ -1,14 +1,23 @@
 /* Game style */
 .game-container {
     margin: 0 auto;
-    width: 600px;
+    width: 100vw;
+    height: 100vh;
     position: relative;
-    padding: 40px;
+    padding: 5rem;
+    background: url("../img/game-bg.jpg") no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow: hidden;
 }
 
 .main-pane {
-    width: 600px;
-    height: 407px;
+    padding: 5px;
+    width: 416px;
+    height: 416px;
+    background: rgba(254, 253, 222, 0.9);
 }
 
 .left-pane {
@@ -120,18 +129,18 @@
 
 .game-board .chess-container .chess {
     position: absolute;
-    border: 1px solid #000000;
+    border: 1px solid #383838;
     border-radius: 50%;
 }
 
 .chess-black {
-    background-color: #000000;
+    background-color: #111111;
 }
 
 .chess-black.last:after {
     position: absolute;
     content: '+';
-    color: #FFFFFF;
+    color: #ffffe0;
     top: 3px;
     left: 9px;
 }
@@ -192,6 +201,14 @@ li.watcher {
 
 .button-group {
     padding: 20px;
+}
+
+.chat-btn {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    background: rgba(254, 253, 222, 0.9);
+    border: 1px solid rgb(219, 218, 191);
 }
 
 /*!* Home style   *!*/
