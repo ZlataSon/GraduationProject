@@ -151,6 +151,8 @@ export default class Game extends Component {
                         </div>
                     </div>
                 </div>
+
+                <a href="/chat" className="chat-btn button">Chat</a>
             </div>
             </MuiThemeProvider>
         );

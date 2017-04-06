@@ -104,7 +104,8 @@ button,
     display: inline-block;
     vertical-align: middle;
     text-decoration: none;
-    color: #000000;
+    font-weight: 700;
+    color: #3f3f3f;
     line-height: 43px;
     text-align: center;
     width: 45px;
