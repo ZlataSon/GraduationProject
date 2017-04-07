@@ -6,7 +6,6 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            status: 'disconnected',
             connections: [],
             onlineCnt: 0
         }
@@ -26,11 +25,16 @@ export default class App extends Component {
     }
 
     getCurrentUser() {
+
         const {connections} = this.state;
         const socketId = this.socket.id;
-        const connectionIndex = connections.findIndex(connection=>{
-            return connection.id === socketId
-        });
+
+        let connectionIndex = -1;
+        if (connections.length > 0) {
+            connectionIndex = connections.findIndex(connection => {
+                return connection.socketID === socketId
+            });
+        }
 
         if (connectionIndex < 0) {
             return {
@@ -52,15 +56,15 @@ export default class App extends Component {
     }
 
     connect() {
-        this.setState({status: 'connected'});
+
     }
 
     disconnect() {
-        this.setState({status: 'disconnected'});
+
     }
 
     updateConnection(Connections) {
-
+        console.log('updateConection');
         const { connections, onlineCnt} = Connections;
 
         this.setState({
@@ -70,16 +74,17 @@ export default class App extends Component {
     }
 
     render() {
-        const {children} = this.props;
-        const {connections, status, onlineCnt} = this.state;
 
+        const {children} = this.props;
+        const {connections, onlineCnt} = this.state;
+        console.log('Render App');
+        console.dir(connections);
         var childrenWithProps = React.Children.map(children, (child) => {
             return React.cloneElement(child, {
                 emit: this.emit.bind(this),
                 user: this.getCurrentUser(),
                 socket: this.socket,
                 connections,
-                status,
                 onlineCnt
             });
         });

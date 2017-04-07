@@ -41,6 +41,8 @@ app.get('/bundle.js', function(req, res){
 // -----------------------------------
 function ChatGameServer() {
     this.connections = [];
+    this.sockets = {};
+    this.onlineCnt = 0;
 }
 
 ChatGameServer.prototype = {
@@ -48,26 +50,29 @@ ChatGameServer.prototype = {
 
     },
     addConnection: function(connection) {
-        var idx = this.connections.findIndex(function (conn) { return conn.socket.id === connection.socket.id });
+        var idx = this.connections.findIndex(function (conn) { return conn.socketID === connection.socket.id });
 
+        var user = {name:connection.name, sex:connection.sex, socketID:connection.socketID};
         if (idx === -1) {
-            this.connections.push(connection);
+            this.connections.push(user);
         } else {
-            this.connections[idx] = connection;
+            this.connections[idx] = user;
         }
+        this.sockets[connection.socket.id] = connection.socket;
     },
     removeConnection: function(id) {
         var idx = this.connections.findIndex(function (conn) { return conn.socket.id === id });
-        var user = '';
+        var name = '';
         var sex = '';
         if (idx > -1) {
             var connection = this.connections[idx];
-            user = connection.name
+            name = connection.name;
             sex = connection.sex;
-            connection.socket.disconnect();
+            let socket = this.sockets[connection.socketID];
+            socket.disconnect();
             this.connections.splice(idx, 1);
         }
-        return {user, sex};
+        return {name, sex};
     },
     getConnections: function() {
         return {
@@ -106,13 +111,14 @@ io.on('connection', function(socket){
     socket.on('join', function (userParams) {
         var name = userParams.name;
         var sex = userParams.sex;
-        io.emit('receive-message',{
-            body: 'connect '+name+' ('+sex+')',
-            date: getCurentDateTime(),
-            user: name
-        });
-        chat.addConnection({ socket, name, sex });
-        //io.emit('updateConnection', chat.getConnections());
+        var socketID = socket.id;
+        // io.emit('receive-message',{
+        //     body: 'connect '+name+' ('+sex+')',
+        //     date: getCurentDateTime(),
+        //     user: name
+        // });
+        chat.addConnection({ socket, name, sex, socketID });
+        io.emit('updateConnection', chat.getConnections());
     });
 
     socket.on('new-message', function(msg){
