@@ -1,25 +1,35 @@
 import React from 'react';
 // import 'https://afeld.github.io/emoji-css/emoji.css';
 
-var Chat = React.createClass({
-    getInitialState: function () {
-
-        return {
+class Chat extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             smilebox: false,
             messages: [],
             socket: this.props.socket,
-            user: undefined
-        }
-    },
-    componentDidMount: function () {
+            user: '',
+            connections:[]
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount () {
         var self = this;
         this.state.socket.on("receive-message", function (msg) {
             var messages = self.state.messages;
             messages.push(msg);
             self.setState({messages: messages})
         });
-    },
-    submitMessage: function () {
+    }
+    componentWillReceiveProps (props) {
+        this.setState({
+            user: props.user.name,
+            connections : props.connections
+        });
+    }
+    submitMessage() {
         var body = document.getElementById("message").value;
         var now = new Date();
         var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -33,27 +43,30 @@ var Chat = React.createClass({
         this.state.socket.emit("new-message",message);
         document.getElementById("message").value = "";
         return false;
-    },
-    pressIcon: function (icon) {
+    }
+    pressIcon(icon) {
         let text = document.getElementById("message").value;
         document.getElementById("message").value = text + ' //'+icon+'// ';
-    },
-    parseText: function (text) {
+    }
+    parseText(text) {
         let newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`)
-            .replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`);
+            .replace(new RegExp('//em-kiss//','g'),`<i class='em em-kiss'> </i>`);
         return {__html: newText};
-    },
-    viewSmilebox: function () {
+    }
+    viewSmilebox() {
         this.setState({smilebox: !this.state.smilebox});
-    },
-    pickUser: function () {
+    }
+    pickUser() {
         var user = document.getElementById('user').value;
         this.setState({user: user});
-    },
-    playGame: function () {
+    }
+    playGame() {
 
-    },
-    render: function () {
+    }
+    handleChange(event) {
+        this.setState({user: event.target.value});
+    }
+    render() {
         var self = this;
         var messages = this.state.messages.map(function (msg,index) {
             return (
@@ -82,10 +95,11 @@ var Chat = React.createClass({
                 </li>
             )
         });
+
         return(
             <div className="app public">
                 <header>
-                    <input type="text" id="user" placeholder="User name"/>
+                    <input type="text" id="user" placeholder="User name" value={this.state.user} onChange={this.handleChange}/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
                         <i className="fa fa-pencil" aria-hidden="true"> </i>
                         {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}
@@ -199,6 +213,6 @@ var Chat = React.createClass({
             </div>
         )
     }
-});
+};
 
 export default Chat;
