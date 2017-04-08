@@ -54,9 +54,73 @@ class Chat extends React.Component {
         const text = document.getElementById("message").value;
         document.getElementById("message").value = text + ' //'+icon+'// ';
     }
+
+
     parseText(text) {
         const newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`)
-            .replace(new RegExp('//em-kiss//','g'),`<i class='em em-kiss'> </i>`);
+            .replace(new RegExp('//em-kiss//','g'),`<i class='em em-kiss'> </i>`)
+            .replace(new RegExp('//em---1//','g'),`<i class='em em---1'> </i>`)
+            .replace(new RegExp('//em--1//','g'),`<i class='em em--1'> </i>`)
+            .replace(new RegExp('//em-hand//','g'),`<i class='em em-hand'> </i>`)
+            .replace(new RegExp('//em-clap//','g'),`<i class='em em-clap'> </i>`)
+            .replace(new RegExp('//em-facepunch//','g'),`<i class='em em-facepunch'> </i>`)
+            .replace(new RegExp('//em-blue_heart//','g'),`<i class='em em-blue_heart'> </i>`)
+            .replace(new RegExp('//em-broken_heart//','g'),`<i class='em em-broken_heart'> </i>`)
+            .replace(new RegExp('//em-gift_heart//','g'),`<i class='em em-gift_heart'> </i>`)
+            .replace(new RegExp('//em-revolving_hearts//','g'),`<i class='em em-revolving_hearts'> </i>`)
+            .replace(new RegExp('//em-cupid//','g'),`<i class='em em-cupid'> </i>`)
+            .replace(new RegExp('//em-four_leaf_clover//','g'),`<i class='em em-four_leaf_clover'> </i>`)
+            .replace(new RegExp('//em-love_letter//','g'),`<i class='em em-love_letter'> </i>`)
+            .replace(new RegExp('//em-lipstick//','g'),`<i class='em em-lipstick'> </i>`)
+            .replace(new RegExp('//em-underage//','g'),`<i class='em em-underage'> </i>`)
+            .replace(new RegExp('//em-zzz//','g'),`<i class='em em-zzz'> </i>`)
+
+            .replace(new RegExp('//em-grinning//','g'),`<i class='em em-grinning'> </i>`)
+            .replace(new RegExp('//em-yum//','g'),`<i class='em em-yum'> </i>`)
+            .replace(new RegExp('//em-sunglasses//','g'),`<i class='em em-sunglasses'> </i>`)
+            .replace(new RegExp('//em-blush//','g'),`<i class='em em-blush'> </i>`)
+            .replace(new RegExp('//em-flushed//','g'),`<i class='em em-flushed'> </i>`)
+            .replace(new RegExp('//em-heart_eyes//','g'),`<i class='em em-heart_eyes'> </i>`)
+            .replace(new RegExp('//em-kissing_closed_eyes//','g'),`<i class='em em-kissing_closed_eyes'> </i>`)
+            .replace(new RegExp('//em-pensive//','g'),`<i class='em em-pensive'> </i>`)
+            .replace(new RegExp('//em-angry//','g'),`<i class='em em-angry'> </i>`)
+            .replace(new RegExp('//em-joy//','g'),`<i class='em em-joy'> </i>`)
+            .replace(new RegExp('//em-anguished//','g'),`<i class='em em-anguished'> </i>`)
+            .replace(new RegExp('//em-sweat//','g'),`<i class='em em-sweat'> </i>`)
+            .replace(new RegExp('//em-stuck_out_tongue//','g'),`<i class='em em-stuck_out_tongue'> </i>`)
+            .replace(new RegExp('//em-astonished//','g'),`<i class='em em-astonished'> </i>`)
+            .replace(new RegExp('//em-cold_sweat//','g'),`<i class='em em-cold_sweat'> </i>`)
+            .replace(new RegExp('//em-scream//','g'),`<i class='em em-scream'> </i>`)
+            .replace(new RegExp('//em-confused//','g'),`<i class='em em-confused'> </i>`)
+            .replace(new RegExp('//em-innocent//','g'),`<i class='em em-innocent'> </i>`)
+            .replace(new RegExp('//em-confounded//','g'),`<i class='em em-confounded'> </i>`)
+            .replace(new RegExp('//em-cry//','g'),`<i class='em em-cry'> </i>`)
+            .replace(new RegExp('//em-sleeping//','g'),`<i class='em em-sleeping'> </i>`)
+            .replace(new RegExp('//em-fearful//','g'),`<i class='em em-fearful'> </i>`)
+            .replace(new RegExp('//em-dizzy_face//','g'),`<i class='em em-dizzy_face'> </i>`)
+            .replace(new RegExp('//em-disappointed//','g'),`<i class='em em-disappointed'> </i>`)
+            .replace(new RegExp('//em-disappointed_relieved//','g'),`<i class='em em-disappointed_relieved'> </i>`)
+            .replace(new RegExp('//em-expressionless//','g'),`<i class='em em-expressionless'> </i>`)
+            .replace(new RegExp('//em-smiling_imp//','g'),`<i class='em em-smiling_imp'> </i>`)
+            .replace(new RegExp('//em-triumph//','g'),`<i class='em em-triumph'> </i>`)
+
+            .replace(new RegExp('//em-birthday//','g'),`<i class='em em-birthday'> </i>`)
+            .replace(new RegExp('//em-gem//','g'),`<i class='em em-gem'> </i>`)
+            .replace(new RegExp('//em-bouquet//','g'),`<i class='em em-bouquet'> </i>`)
+            .replace(new RegExp('//em-cherry_blossom//','g'),`<i class='em em-cherry_blossom'> </i>`)
+            .replace(new RegExp('//em-candy//','g'),`<i class='em em-candy'> </i>`)
+            .replace(new RegExp('//em-beers//','g'),`<i class='em em-beers'> </i>`)
+            .replace(new RegExp('//em-coffee//','g'),`<i class='em em-coffee'> </i>`)
+            .replace(new RegExp('//em-rose//','g'),`<i class='em em-rose'> </i>`)
+            .replace(new RegExp('//em-hamburger//','g'),`<i class='em em-hamburger'> </i>`)
+            .replace(new RegExp('//em-strawberry//','g'),`<i class='em em-strawberry'> </i>`)
+            .replace(new RegExp('//em-peach//','g'),`<i class='em em-peach'> </i>`)
+            .replace(new RegExp('//em-stew//','g'),`<i class='em em-stew'> </i>`)
+            .replace(new RegExp('//em-tropical_drink//','g'),`<i class='em em-tropical_drink'> </i>`)
+            .replace(new RegExp('//em-wine_glass//','g'),`<i class='em em-wine_glass'> </i>`)
+            .replace(new RegExp('//em-shaved_ice//','g'),`<i class='em em-shaved_ice'> </i>`)
+
+            .replace(new RegExp('//em-christmas_tree//','g'),`<i class='em em-christmas_tree'> </i>`);
         return {__html: newText};
     }
     viewSmileBox() {
@@ -116,10 +180,10 @@ class Chat extends React.Component {
         return(
             <div className="app public">
                 <header>
-                    <input type="text" id="user" placeholder="User name" value={self.state.name} onChange={this.handleChange}/>
+                    <h1>Water chat</h1>
+                    <input type="text" id="user" placeholder="Change your Nickname" value={self.state.name} onChange={this.handleChange}/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
-                        <i className="fa fa-pencil" aria-hidden="true"> </i>
-                        {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}
+                        <i className="fa fa-floppy-o" aria-hidden="true"> </i>
                     </a>
                 </header>
 
@@ -180,14 +244,13 @@ class Chat extends React.Component {
 
                         <i className="em em-birthday" onClick={()=> self.pressIcon("em-birthday")}> </i>
                         <i className="em em-bouquet" onClick={()=> self.pressIcon("em-bouquet")}> </i>
+                        <i className="em em-gem" onClick={()=> self.pressIcon("em-gem")}> </i>
                         <i className="em em-cherry_blossom" onClick={()=> self.pressIcon("em-cherry_blossom")}> </i>
                         <i className="em em-candy" onClick={()=> self.pressIcon("em-candy")}> </i>
                         <i className="em em-beers" onClick={()=> self.pressIcon("em-beers")}> </i>
                         <i className="em em-coffee" onClick={()=> self.pressIcon("em-coffee")}> </i>
                         <i className="em em-rose" onClick={()=> self.pressIcon("em-rose")}> </i>
                         <i className="em em-hamburger" onClick={()=> self.pressIcon("em-hamburger")}> </i>
-                        <i className="em em-christmas_tree" onClick={()=> self.pressIcon("em-christmas_tree")}> </i>
-                        <i className="em em-gem" onClick={()=> self.pressIcon("em-gem")}> </i>
                         <i className="em em-strawberry" onClick={()=> self.pressIcon("em-strawberry")}> </i>
                         <i className="em em-peach" onClick={()=> self.pressIcon("em-peach")}> </i>
                         <i className="em em-stew" onClick={()=> self.pressIcon("em-stew")}> </i>
@@ -217,8 +280,9 @@ class Chat extends React.Component {
                         <i className="em em-fishing_pole_and_fish" onClick={()=> self.pressIcon("em-fishing_pole_and_fish")}> </i>
                         <i className="em em-guitar" onClick={()=> self.pressIcon("em-guitar")}> </i>
                         <i className="em em-performing_arts" onClick={()=> self.pressIcon("em-performing_arts")}> </i>
+                        <i className="em em-christmas_tree" onClick={()=> self.pressIcon("em-christmas_tree")}> </i>
                     </div>
-                    <input type="text" id="message" autoComplete="off"/>
+                    <textarea id="message" autoComplete="off"/>
                     <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>
                         <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                     </a>

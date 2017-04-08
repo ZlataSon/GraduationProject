@@ -16,17 +16,6 @@ main.login {
     color: #ffffff;
 }
 
-main.login h1 {
-    font-family: 'Spirax', cursive;
-    font-size: 35px;
-    color: #ffffff;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 0;
-    padding: 25px 0 5px;
-    text-align: center;
-}
-
 main.login h3 {
     font-family: 'Spirax', cursive;
     font-size: 16px;
