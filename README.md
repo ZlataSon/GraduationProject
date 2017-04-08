@@ -1,5 +1,5 @@
 # GraduationProject
-Graduation project for GeekHub
+Graduation project for GeekHub - WATER CHAT (online speaking chat with game "Five in line" by Zlata Son & Evgen S.)
 
 Part 1 (Zlata Son): Chat on sockets - specs
 
@@ -40,4 +40,10 @@ Part 2 (Evgen): Five-in-line on React - specs
        реализация игры против искусственного интеллекта.
 
        Приложение нужно залить на https://dashboard.heroku.com/
+
+![1 screen](public/img/sc1.png)
+
+![2 screen](public/img/sc2.png)
+
+![3 screen](public/img/sc3.png)
 
