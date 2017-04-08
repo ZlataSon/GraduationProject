@@ -8,7 +8,8 @@ class Chat extends React.Component {
             smilebox: false,
             messages: [],
             socket: this.props.socket,
-            user: '',
+            name: '',
+            sex: '',
             connections:[]
         };
 
@@ -16,16 +17,15 @@ class Chat extends React.Component {
     }
 
     componentDidMount () {
-        var self = this;
-        this.state.socket.on("receive-message", function (msg) {
-            var messages = self.state.messages;
+        this.state.socket.on("receive-message", (msg) => {
+            var messages = this.state.messages;
             messages.push(msg);
-            self.setState({messages: messages})
+            this.setState({messages: messages})
         });
     }
     componentWillReceiveProps (props) {
         this.setState({
-            user: props.user.name,
+            name: props.user.name,
             connections : props.connections
         });
     }
@@ -38,7 +38,9 @@ class Chat extends React.Component {
         var message = {
             body: body,
             date: formatDate,
-            user: this.state.user || "guest"
+            name: this.state.name || "guest",
+            sex: this.state.sex,
+            socketID: this.state.socket.id
         };
         this.state.socket.emit("new-message",message);
         document.getElementById("message").value = "";
@@ -58,13 +60,13 @@ class Chat extends React.Component {
     }
     pickUser() {
         var user = document.getElementById('user').value;
-        this.setState({user: user});
+        this.setState({name: user});
     }
     playGame() {
 
     }
     handleChange(event) {
-        this.setState({user: event.target.value});
+        this.setState({name: event.target.value});
     }
     render() {
         var self = this;
@@ -74,7 +76,7 @@ class Chat extends React.Component {
                 <li key={index}>
                     <p className="msg-title">
                         <img src="../img/girl_icon_chart.png" alt=""/>
-                        <strong>{msg.user}: </strong>
+                        <strong>{msg.name}: </strong>
                         <span>
                             <a className="button sm-button" href="javascript:void(0)">
                                 <i className="fa fa-weixin" aria-hidden="true"> </i>
@@ -99,7 +101,7 @@ class Chat extends React.Component {
         return(
             <div className="app public">
                 <header>
-                    <input type="text" id="user" placeholder="User name" value={this.state.user} onChange={this.handleChange}/>
+                    <input type="text" id="user" placeholder="User name" value={this.state.name} onChange={this.handleChange}/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
                         <i className="fa fa-pencil" aria-hidden="true"> </i>
                         {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}

@@ -99,12 +99,12 @@ io.on('connection', function(socket){
         let userParams = chat.removeConnection(socket.id);
         let name = userParams.name;
         let sex = userParams.sex;
-        io.emit('receive-message',
-            {
-                body: 'disconnect '+name+' ('+sex+')',
-                date: getCurentDateTime(),
-                user: name
-            });
+        // io.emit('receive-message',
+        //     {
+        //         body: 'disconnect '+name+' ('+sex+')',
+        //         date: getCurentDateTime(),
+        //         user: name
+        //     });
         //io.emit('updateConnection', chat.getConnections());
     });
 
