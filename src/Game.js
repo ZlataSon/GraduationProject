@@ -17,7 +17,8 @@ const CHESS_SIZE = 28;
 export default class Game extends Component {
     constructor(props) {
         super(props);
-
+        console.log('constructor Game');
+        console.dir(props);
         let a=[];
         for (let i = 0; i < BOARD_SIZE; i++) { a[i]=[];
             for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = undefined; } }
