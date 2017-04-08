@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router';
 // import 'https://afeld.github.io/emoji-css/emoji.css';
 
 class Chat extends React.Component {
@@ -9,9 +9,9 @@ class Chat extends React.Component {
             smilebox: false,
             messages: [],
             socket: this.props.socket,
-            name: '',
-            sex: '',
-            connections:[]
+            name: props.user.name,
+            sex: props.user.sex,
+            connections:props.connections
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -19,10 +19,13 @@ class Chat extends React.Component {
 
     componentDidMount () {
         this.state.socket.on("receive-message", (msg) => {
-            var messages = this.state.messages;
+            const messages = this.state.messages;
             messages.push(msg);
-            this.setState({messages: messages})
+            this.setState({messages: messages});
         });
+    }
+    componentWillUnmount() {
+        this.state.socket.off("receive-message");
     }
     componentWillReceiveProps (props) {
         this.setState({
@@ -138,6 +141,7 @@ class Chat extends React.Component {
         // console.dir(arguments);
         //const socketID = event.target.value;
         //const mySocketID = this.state.socket.id;
+
         const path = `/game/${socketID}`;
         browserHistory.push(path);
 

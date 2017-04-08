@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import darkBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
@@ -32,13 +33,15 @@ export default class Game extends Component {
             lastCol: -1,
             isFinished: false,
             canMove: true,
-            board: a
+            board: []
         };
 
         this.move = this.move.bind(this);
 
         // Needed for onTouchTap fix Warning-Error
         injectTapEventPlugin();
+
+        this.quit = this.quit.bind(this);
     }
 
     getTargetPosition(e) {
@@ -81,7 +84,8 @@ export default class Game extends Component {
     }
 
     quit(e) {
-        console.log('quit');
+        const path = `/chat`;
+        browserHistory.push(path);
     }
 
     render() {
@@ -153,7 +157,7 @@ export default class Game extends Component {
                     </div>
                 </div>
 
-                <a href="/chat" className="chat-btn button">Chat</a>
+                <a href="javascript:void(0)" className="chat-btn button" onClick={this.quit}>Chat</a>
             </div>
             </MuiThemeProvider>
         );
