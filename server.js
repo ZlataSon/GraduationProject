@@ -80,10 +80,16 @@ ChatGameServer.prototype = {
             onlineCnt: this.connections.length
         };
     },
+    getUserByID: function (id) {
+        const idx = this.connections.findIndex(function (conn) { return conn.socketID === id });
+        return this.connections[idx];
+    }
 };
 
 var chat = new ChatGameServer();
 chat.init();
+
+
 // -----------------------------------
 //  Socket.io
 // -----------------------------------
@@ -125,6 +131,34 @@ io.on('connection', function(socket){
         io.emit('receive-message',msg);
     });
 
+    socket.on('request-game', (param) => {
+        const opponent = param.player2;
+        const msg = {
+            id: param.player1,
+            name: chat.getUserByID(param.player1).name
+        };
+        socket.to(opponent).emit('accept-game', msg);
+    });
+
+    socket.on('accept-game', (param) => {
+        const opponent = param.player2;
+        const msg1 = {
+            id: param.player1,
+            name: chat.getUserByID(param.player1).name
+        };
+        const msg2 = {
+            id: param.player2,
+            name: chat.getUserByID(param.player2).name
+        };
+        io.to(socket.id).emit('start-game', msg2);
+        socket.to(opponent).emit('start-game', msg1);
+    });
+
+    socket.on('cancel-game', (param) => {
+        const opponent = param.player2;
+        io.to(socket.id).emit('cancel-game');
+        socket.to(opponent).emit('cancel-game');
+    });
 });
 
 server.listen(port, function(){
