@@ -61,7 +61,7 @@ ChatGameServer.prototype = {
         this.sockets[connection.socket.id] = connection.socket;
     },
     removeConnection: function(id) {
-        var idx = this.connections.findIndex(function (conn) { return conn.socket.id === id });
+        var idx = this.connections.findIndex(function (conn) { return conn.socketID === id });
         var name = '';
         var sex = '';
         if (idx > -1) {

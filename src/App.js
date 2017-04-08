@@ -74,12 +74,14 @@ export default class App extends Component {
     }
 
     render() {
-
         const {children} = this.props;
         const {connections, onlineCnt} = this.state;
         console.log('Render App');
+        console.dir(this.props.children);
         console.dir(connections);
         var childrenWithProps = React.Children.map(children, (child) => {
+            console.log('App: maped children');
+            console.dir(child);
             return React.cloneElement(child, {
                 emit: this.emit.bind(this),
                 user: this.getCurrentUser(),
