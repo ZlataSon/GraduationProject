@@ -1,4 +1,5 @@
 import React from 'react';
+import { browserHistory } from 'react-router'
 // import 'https://afeld.github.io/emoji-css/emoji.css';
 
 class Chat extends React.Component {
@@ -26,51 +27,65 @@ class Chat extends React.Component {
     componentWillReceiveProps (props) {
         this.setState({
             name: props.user.name,
+            sex: props.user.sex,
             connections : props.connections
         });
     }
     submitMessage() {
-        var body = document.getElementById("message").value;
-        var now = new Date();
-        var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-        var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        var formatDate = mS[now.getMonth()] + ", " + now.getDate() + " - " + days[now.getDay()] + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-        var message = {
+        const body = document.getElementById("message").value;
+        const now = new Date();
+        const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        const mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        const formatDate = mS[now.getMonth()] + ", " + now.getDate() + " - " + days[now.getDay()] + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        const message = {
             body: body,
             date: formatDate,
             name: this.state.name || "guest",
             sex: this.state.sex,
             socketID: this.state.socket.id
         };
+        console.log('send Message');
+        console.dir(message);
         this.state.socket.emit("new-message",message);
         document.getElementById("message").value = "";
         return false;
     }
     pressIcon(icon) {
-        let text = document.getElementById("message").value;
+        const text = document.getElementById("message").value;
         document.getElementById("message").value = text + ' //'+icon+'// ';
     }
     parseText(text) {
-        let newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`)
+        const newText = text.replace(new RegExp('//em-eyes//','g'),`<i class='em em-eyes'> </i>`)
             .replace(new RegExp('//em-kiss//','g'),`<i class='em em-kiss'> </i>`);
         return {__html: newText};
     }
-    viewSmilebox() {
+    viewSmileBox() {
         this.setState({smilebox: !this.state.smilebox});
     }
     pickUser() {
-        var user = document.getElementById('user').value;
+        const user = document.getElementById('user').value;
         this.setState({name: user});
     }
-    playGame() {
+    playGame(socketID) {
+        console.log('press playGame');
+        //console.dir(event.tar);
+        console.dir(socketID);
+        // console.dir(noName);
+        // console.dir(arguments);
+        //const socketID = event.target.value;
+        //const mySocketID = this.state.socket.id;
+        const path = `/game/${socketID}`;
+        browserHistory.push(path);
 
     }
     handleChange(event) {
         this.setState({name: event.target.value});
     }
     render() {
-        var self = this;
-        var messages = this.state.messages.map(function (msg,index) {
+        const self = this;
+        const messages = this.state.messages.map(function (msg,index) {
+            console.log('out put message');
+            console.dir(msg);
             return (
 
                 <li key={index}>
@@ -81,7 +96,7 @@ class Chat extends React.Component {
                             <a className="button sm-button" href="javascript:void(0)">
                                 <i className="fa fa-weixin" aria-hidden="true"> </i>
                             </a>
-                            <a className="button sm-button" href="/game" >
+                            <a className="button sm-button" href="javascript:void(0)" onClick={self.playGame.bind(self,msg.socketID)}>
                                 <i className="fa fa-gamepad" aria-hidden="true"> </i>
                             </a>
                         </span>
@@ -101,7 +116,7 @@ class Chat extends React.Component {
         return(
             <div className="app public">
                 <header>
-                    <input type="text" id="user" placeholder="User name" value={this.state.name} onChange={this.handleChange}/>
+                    <input type="text" id="user" placeholder="User name" value={self.state.name} onChange={this.handleChange}/>
                     <a className="button" href="javascript:void(0)" onClick={()=> self.pickUser()}>
                         <i className="fa fa-pencil" aria-hidden="true"> </i>
                         {/*<i className="fa fa-floppy-o" aria-hidden="true"> </i>*/}
@@ -113,7 +128,7 @@ class Chat extends React.Component {
                 </main>
 
                 <footer>
-                    <div className={"smile-box "+(this.state.smilebox ? 'show' : 'hide')}>
+                    <div className={"smile-box "+(self.state.smilebox ? 'show' : 'hide')}>
                         <i className="em em-eyes" onClick={()=> self.pressIcon("em-eyes")}> </i>
                         <i className="em em-kiss" onClick={()=> self.pressIcon("em-kiss")}> </i>
                         <i className="em em---1" onClick={()=> self.pressIcon("em---1")}> </i>
@@ -207,7 +222,7 @@ class Chat extends React.Component {
                     <a className="button" href="javascript:void(0)" onClick={() => self.submitMessage()}>
                         <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                     </a>
-                    <a className="button smile" href="javascript:void(0)" onClick={() => self.viewSmilebox()} >
+                    <a className="button smile" href="javascript:void(0)" onClick={() => self.viewSmileBox()} >
                         <i className="fa fa-smile-o" aria-hidden="true"> </i>
                     </a>
 
