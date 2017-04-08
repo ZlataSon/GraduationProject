@@ -8,7 +8,7 @@
 /**==========================================================================*/
 
 .public header {
-    background: rgba(4, 61, 67, 0.7);
+    background: rgba(4, 61, 67, 0.3);
     padding: 3px;
     position: fixed;
     height: 60px;
@@ -18,7 +18,7 @@
     box-sizing: border-box;
     font-family: Roboto, sans-serif;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.5);
     border-radius: 0px;
     z-index: 1100;
     display: flex;
@@ -46,7 +46,7 @@
 /**==========================================================================*/
 
 .public footer {
-    background: rgba(4, 61, 67, 0.7);
+    background: rgba(4, 61, 67, 0.3);
     padding: 3px;
     position: fixed;
     height: 60px;
@@ -56,7 +56,7 @@
     box-sizing: border-box;
     font-family: Roboto, sans-serif;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.5);
     border-radius: 0px;
     z-index: 1100;
     display: flex;
@@ -105,8 +105,8 @@
 /**==========================================================================*/
 
 .app main {
-    height: calc(100vh - 120px);
-    margin: 60px 0;
+    height: calc(100vh - 130px);
+    margin: 65px 0;
     padding: 20px 30px;
     overflow: auto;
 }
@@ -244,4 +244,122 @@ button:active,
 
 .button.sm-button .fa {
     font-size: 18px;
+}
+
+/**==========================================================================*/
+/*Private chat in sidebar */
+/**==========================================================================*/
+.sidenav {
+    height: calc(100vh - 130px);
+    margin: 65px 0;
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: rgba(143, 231, 255, 0.76); /* Black*/
+    box-shadow: -4px -1px 6px rgba(0, 0, 0, 0.27), -3px 1px 4px rgba(0, 0, 0, 0.23);
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.public .sidenav header {
+    background: rgba(4, 61, 67, 0.3);
+    padding: 3px;
+    position: fixed;
+    height: 60px;
+    top: 65px;
+    width: 100%;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-shadow: 0px 4px 3px rgba(0,0,0,0.3), 0 1px 4px rgba(0,0,0,0.12);
+    border-radius: 0px;
+    z-index: 1100;
+    display: flex;
+    min-height: 64px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.public .sidenav footer {
+    background: rgba(4, 61, 67, 0.3);
+    padding: 3px;
+    position: fixed;
+    height: 80px;
+    bottom: 65px;
+    width: 100%;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    box-shadow: 1px -4px 6px rgba(0, 0, 0, 0.45), -1px 0px 4px rgba(0, 0, 0, 0.48);
+    border-radius: 0px;
+    z-index: 1100;
+    display: flex;
+    min-height: 64px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.open-private {
+    position: absolute;
+    top: 5px;
+    right: 25px;
+    width: 100px;
+    border-radius: 65px;
+}
+
+.sidenav a:hover,
+.sidenav a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 30px;
+    padding: 15px 10px;
+    text-decoration: none;
+    color: #296da0;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav .mainselection select {
+    border: 0;
+    color: #2d5a80;
+    background: transparent;
+    font-size: 17px;
+    font-weight: bold;
+    padding: 5px 10px;
+    line-height: 27px;
+    width: 260px;
+    -webkit-appearance: none;
+}
+
+.sidenav .mainselection {
+    overflow:hidden;
+    width: 250px;
+    -moz-border-radius: 9px 9px 9px 9px;
+    -webkit-border-radius: 9px 9px 9px 9px;
+    border-radius: 9px 9px 9px 9px;
+    box-shadow: 1px 1px 11px #9bc0ff;
+    background: rgb(173, 193, 255) url("http://i62.tinypic.com/15xvbd5.png") no-repeat scroll 218px center;
+    margin: 10px 0 10px 35px;
+}
+
+.public .sidenav footer textarea {
+    border: 0;
+    padding: 5px 15px;
+    width: 170px;
+    height: 65px;
+    margin: 5px;
+    border-radius: 25px;
+    line-height: 1.6;
+    color: #333;
+    font-size: 12px;
 }
