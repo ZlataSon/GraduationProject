@@ -301,11 +301,17 @@ button:active,
     width: 300px;
 }
 
+.msg-title-private strong {
+    font-family: 'Spirax', cursive;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+}
+
 #messages-private li {
     padding: 5px 10px;
     color: #6e6e6e;
     border-radius: 25px;
-    width: 80%;
+    width: 75%;
     white-space: normal;
 }
 
@@ -316,10 +322,12 @@ button:active,
 #messages-private li:nth-child(odd) {
     background: rgba(255, 255, 255, 0.7);
     margin-left: 15%;
+    margin-right: 5%;
 }
 
 #messages-private li:nth-child(even) {
     background: rgba(119, 255, 247, 0.7);
+    margin-left: 5%;
     margin-right: 15%;
 }
 
