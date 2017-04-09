@@ -8,7 +8,7 @@ class Chat extends React.Component {
         this.state = {
             smilebox: false,
             messages: [],
-            socket: this.props.socket,
+            socket: props.socket,
             name: props.user.name,
             sex: props.user.sex,
             connections:props.connections,
@@ -30,9 +30,9 @@ class Chat extends React.Component {
         this.state.socket.on("cancel-game", () => {
             this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
         });
-        this.state.socket.on("start-game", (msg) => {
+        this.state.socket.on("start-game", (gameID) => {
             console.log('receive Start game');
-            const path = `/game/${msg.id}`;
+            const path = `/game/${gameID}`;
             browserHistory.push(path);
             //this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:'' }});
         });

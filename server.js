@@ -89,6 +89,21 @@ ChatGameServer.prototype = {
 var chat = new ChatGameServer();
 chat.init();
 
+function GameServer() {
+    this.gameID = '';
+    this.player1 = {};
+    this.player2 = {};
+}
+
+GameServer.prototype = {
+    init: function(gID, pl1,pl2) {
+        this.gameID = gID;
+        this.player1 = pl1;
+        this.player2 = pl2;
+    },
+};
+
+let gameOnServer = {};
 
 // -----------------------------------
 //  Socket.io
@@ -142,22 +157,35 @@ io.on('connection', function(socket){
 
     socket.on('accept-game', (param) => {
         const opponent = param.player2;
-        const msg1 = {
-            id: param.player1,
-            name: chat.getUserByID(param.player1).name
-        };
-        const msg2 = {
-            id: param.player2,
-            name: chat.getUserByID(param.player2).name
-        };
-        io.to(socket.id).emit('start-game', msg2);
-        socket.to(opponent).emit('start-game', msg1);
+
+        let gameID = '';
+        do {
+            gameID = (Math.random().toString(10) + "000000000000").substr(2, 11);
+            var findID = gameOnServer[gameID];
+        } while (findID);
+
+        gameOnServer[gameID] = new GameServer();
+        gameOnServer[gameID].init(gameID, param.player1, param.player2);
+
+        io.to(socket.id).emit('start-game', gameID);
+        socket.to(opponent).emit('start-game', gameID);
     });
 
     socket.on('cancel-game', (param) => {
         const opponent = param.player2;
         io.to(socket.id).emit('cancel-game');
         socket.to(opponent).emit('cancel-game');
+    });
+
+    socket.on('init-game-onclient', (param) => {
+        this.game = gameOnServer[param.gameID];
+        io.to(socket.id).emit('init-game-onclient',this.game);
+    });
+    socket.on('move', (param) => {
+        if (socket.id == this.game.player1) io.to(this.game.player1).emit('showMove',param);
+            else socket.to(this.game.player1).emit('showMove',param);
+        if (socket.id == this.game.player2) io.to(this.game.player2).emit('showMove',param);
+            else socket.to(this.game.player2).emit('showMove',param);
     });
 });
 
