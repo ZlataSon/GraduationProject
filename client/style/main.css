@@ -61,3 +61,10 @@ h1 {
     text-align: center;
 }
 
+.fa-text-green {
+    color: #04df29 !important;
+}
+
+.fa-text-red {
+    color: #e96468 !important;
+}
