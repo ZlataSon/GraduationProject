@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client';
 import { Link } from 'react-router'
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 export default class App extends Component {
     constructor(props) {
@@ -9,6 +10,8 @@ export default class App extends Component {
             connections: [],
             onlineCnt: 0
         }
+        // Needed for onTouchTap fix Warning-Error
+        injectTapEventPlugin();
     }
 
     componentWillMount() {
