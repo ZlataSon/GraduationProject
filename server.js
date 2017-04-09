@@ -9,8 +9,8 @@ var http = require('http');
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 
-var port = '3000';
-app.set('port', (process.env.PORT || port));
+var port = (process.env.PORT || '3000');
+app.set('port', port);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -302,5 +302,5 @@ io.on('connection', function(socket){
 });
 
 server.listen(port, function(){
-    console.log('listening on *:3000');
+    console.log('listening on *:',port);
 });
