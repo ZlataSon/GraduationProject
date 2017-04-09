@@ -229,6 +229,18 @@ io.on('connection', function(socket){
         io.emit('receive-message',msg);
     });
 
+    socket.on('activate-private', (param) => {
+        let newParam = {mainUser: param.opponent, opponent: param.mainUser};
+        socket.to(param.opponent).emit('activate-private', newParam);
+    });
+
+    socket.on('new-message-private', function(msg){
+        // let newMsg = {name: msg.opponent, opponent: msg.name,
+        //     socketID: msg.opponentID, opponentID: msg.socketID};
+        io.to(msg.socketID).emit('new-message-private', msg);
+        socket.to(msg.opponentID).emit('new-message-private', msg);
+    });
+
     socket.on('request-game', (param) => {
         const opponent = param.player2;
         const msg = {
@@ -264,6 +276,7 @@ io.on('connection', function(socket){
         let game = gameOnServer[param.gameID];
         io.to(socket.id).emit('init-game-onclient',game);
     });
+
     socket.on('move', (param) => {
         if (!param.gameID) return '';
         let game = gameOnServer[param.gameID];

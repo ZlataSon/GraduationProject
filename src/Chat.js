@@ -8,14 +8,20 @@ class Chat extends React.Component {
         this.state = {
             smilebox: false,
             messages: [],
+            messagesPrivate: [],
             socket: props.socket,
             name: props.user.name,
             sex: props.user.sex,
+            opponent: "",
+            opponentID: "",
             connections:props.connections,
             gameInvite:{status:'', opponent:'', opponentID:''}
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.submitMessage = this.submitMessage.bind(this);
+        this.submitMessagePrivate = this.submitMessagePrivate.bind(this);
+        this.openNav = this.openNav.bind(this);
     }
 
     componentDidMount () {
@@ -34,7 +40,17 @@ class Chat extends React.Component {
             console.log('receive Start game');
             const path = `/game/${gameID}`;
             browserHistory.push(path);
-            //this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:'' }});
+        });
+        this.state.socket.on("activate-private", (param) => {
+            document.getElementById("mySidenav").style.width = "300px";
+            const idx = this.state.connections.findIndex(function (conn) { return conn.socketID === param.opponent });
+            this.setState({opponentID: param.opponent, opponent: this.state.connections[idx].name });
+        });
+
+        this.state.socket.on("new-message-private", (msg) => {
+            const messages = this.state.messagesPrivate;
+            messages.push(msg);
+            this.setState({messagesPrivate: messages});
         });
     }
     componentWillUnmount() {
@@ -42,6 +58,8 @@ class Chat extends React.Component {
         this.state.socket.off("accept-game");
         this.state.socket.off("cancel-game");
         this.state.socket.off("start-game");
+        this.state.socket.off("activate-private");
+        this.state.socket.off("new-message-private");
     }
     componentWillReceiveProps (props) {
         this.setState({
@@ -50,6 +68,26 @@ class Chat extends React.Component {
             connections : props.connections
         });
     }
+
+    submitMessagePrivate() {
+        const body = document.getElementById("message-private").value;
+        const now = new Date();
+        const formatDate = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        const message = {
+            body: body,
+            date: formatDate,
+            name: this.state.name || "guest",
+            socketID: this.state.socket.id,
+            opponent: this.state.opponent,
+            opponentID: this.state.opponentID
+        };
+        console.log('send Private Message');
+        console.dir(message);
+        this.state.socket.emit("new-message-private",message);
+        document.getElementById("message-private").value = "";
+        return false;
+    }
+
     submitMessage() {
         const body = document.getElementById("message").value;
         const now = new Date();
@@ -63,8 +101,6 @@ class Chat extends React.Component {
             sex: this.state.sex,
             socketID: this.state.socket.id
         };
-        console.log('send Message');
-        console.dir(message);
         this.state.socket.emit("new-message",message);
         document.getElementById("message").value = "";
         return false;
@@ -76,8 +112,12 @@ class Chat extends React.Component {
     }
 
     /* Set the width of the side navigation to 300px */
-    openNav() {
+    openNav(socketID) {
         document.getElementById("mySidenav").style.width = "300px";
+        const param = {mainUser: this.state.socket.id, opponent: socketID};
+        this.state.socket.emit("activate-private",param);
+        const idx = this.state.connections.findIndex(function (conn) { return conn.socketID === socketID });
+        this.setState({opponentID: socketID, opponent: this.state.connections[idx].name });
     }
 
     /* Set the width of the side navigation to 0 */
@@ -185,19 +225,11 @@ class Chat extends React.Component {
 
     playGame(socketID) {
         if (this.state.gameInvite.status != '') return;
-        //console.log('press playGame');
-        // console.dir(arguments);
-        //const socketID = event.target.value;
-        //const mySocketID = this.state.socket.id;
 
         const param = {player1: this.state.socket.id, player2: socketID};
         this.state.socket.emit("request-game",param);
 
         const idx = this.state.connections.findIndex(function (conn) { return conn.socketID === socketID });
-        // console.log('press playGame');
-        // console.dir(this.state.connections[idx].name);
-        // console.dir(this.state.connections[idx].id);
-        // console.dir(this.state.connections);
         this.setState({gameInvite: {
             status:'send',
             opponent:this.state.connections[idx].name,
@@ -208,7 +240,6 @@ class Chat extends React.Component {
     acceptGame(socketID) {
         const param = {player1: this.state.socket.id, player2: socketID};
         this.state.socket.emit("accept-game",param);
-        //this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
     }
 
     cancelGame(socketID) {
@@ -226,28 +257,38 @@ class Chat extends React.Component {
     render() {
         const messages = this.state.messages.map((msg,index)=> {
             console.log('out put message');
-            console.dir(this.state.sex);
             return (
 
                 <li key={index}>
                     <p className="msg-title">
-                        {this.state.sex == "♂ Male" ?
+                        {msg.sex == "♂ Male" ?
                             <img src="../img/boy_icon_chart.png" alt=""/>
                             :
-                            this.state.sex == "♀ Female" ?
+                            msg.sex == "♀ Female" ?
                                 <img src="../img/girl_icon_chart.png" alt=""/>
                                 :
                                 <img src="../img/admin_icon.gif" alt=""/>
                         }
                         <strong>{msg.name}: </strong>
-                        <span>
-                            <a className="button sm-button" href="javascript:void(0)" onClick={()=> this.openNav()}>
-                                <i className="fa fa-weixin" aria-hidden="true"> </i>
-                            </a>
-                            <a className="button sm-button" href="javascript:void(0)" onClick={this.playGame.bind(this,msg.socketID)}>
-                                <i className="fa fa-gamepad" aria-hidden="true"> </i>
-                            </a>
-                        </span>
+                        {msg.socketID != this.state.socket.id ?
+                            <span>
+                                <a className="button sm-button" href="javascript:void(0)" onClick={this.openNav.bind(this,msg.socketID)}>
+                                    <i className="fa fa-weixin" aria-hidden="true"> </i>
+                                </a>
+                                <a className="button sm-button" href="javascript:void(0)" onClick={this.playGame.bind(this,msg.socketID)}>
+                                    <i className="fa fa-gamepad" aria-hidden="true"> </i>
+                                </a>
+                            </span>
+                            :
+                            <span>
+                                <a className="button sm-button disable" href="javascript:void(0)">
+                                    <i className="fa fa-weixin" aria-hidden="true"> </i>
+                                </a>
+                                <a className="button sm-button disable" href="javascript:void(0)">
+                                    <i className="fa fa-gamepad" aria-hidden="true"> </i>
+                                </a>
+                            </span>
+                        }
                         <span className="date">{msg.date}</span>
                     </p>
 
@@ -256,6 +297,22 @@ class Chat extends React.Component {
                         {/*{this.parseText(msg.body)}>*/}
                         <div dangerouslySetInnerHTML={this.parseText(msg.body)} />
                         <i className="fa fa-quote-right" aria-hidden="true"> </i>
+                    </div>
+                </li>
+            )
+        });
+
+        const messagesPrivate = this.state.messagesPrivate.map((msg,index)=> {
+            console.log('out put Private message');
+            return (
+
+                <li key={index}>
+                    <p className="msg-title-private">
+                        <strong><span>{msg.date} </span> {msg.name}: </strong>
+                    </p>
+
+                    <div className="msg-body-private">
+                        <div dangerouslySetInnerHTML={this.parseText(msg.body)} />
                     </div>
                 </li>
             )
@@ -270,16 +327,22 @@ class Chat extends React.Component {
                         <i className="fa fa-floppy-o" aria-hidden="true"> </i>
                     </a>
                     {this.state.gameInvite.status=='recive'?
-                        <div>
-                            <h3>Request on game from {this.state.gameInvite.opponent} ({this.state.gameInvite.opponentID})</h3>
-                            <a href="javascript:void(0)" className="button" onClick={this.acceptGame.bind(this,this.state.gameInvite.opponentID)}>Accept</a>
-                            <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>Cancel</a>
+                        <div className="info-alert">
+                            <span>Request on game from {this.state.gameInvite.opponent}</span>
+                            <a href="javascript:void(0)" className="button" onClick={this.acceptGame.bind(this,this.state.gameInvite.opponentID)}>
+                                <i className="fa fa-check-square fa-text-green" aria-hidden="true"> </i>
+                            </a>
+                            <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>
+                                <i className="fa fa-window-close fa-text-red" aria-hidden="true"> </i>
+                            </a>
                         </div>
                         :
                         this.state.gameInvite.status=='send'?
-                            <div>
-                                <h3>Wait for {this.state.gameInvite.opponent} ({this.state.gameInvite.opponentID})</h3>
-                                <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>Cancel</a>
+                            <div className="info-alert">
+                                <span>Wait for {this.state.gameInvite.opponent}</span>
+                                <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>
+                                    <i className="fa fa-window-close fa-text-red" aria-hidden="true"> </i>
+                                </a>
                             </div>
                             :
                             null
@@ -295,19 +358,20 @@ class Chat extends React.Component {
                             <a href="javascript:void(0)" className="closebtn" onClick={()=> this.closeNav()}>&times;</a>
                             <div className="mainselection">
                                 <select ref="refSex">
-                                    <option>Users</option>
-                                    <option>NickName</option>
-                                    <option>NickName2</option>
+                                    <option>{this.state.opponent}</option>
                                 </select>
                             </div>
                         </header>
+                        <div className="main-private">
+                            <ul id="messages-private">{messagesPrivate}</ul>
+                        </div>
 
                         <footer>
-                            <textarea id="messagePrivat" autoComplete="off"/>
-                            <a className="button" href="javascript:void(0)" onClick={() => this.submitMessage()}>
+                            <textarea id="message-private" autoComplete="off"/>
+                            <a className="button" href="javascript:void(0)" onClick={this.submitMessagePrivate}>
                                 <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                             </a>
-                            <a className="button smile" href="javascript:void(0)" onClick={() => this.viewSmileBox()} >
+                            <a className="button smile" href="javascript:void(0)" onClick={this.viewSmileBox} >
                                 <i className="fa fa-smile-o" aria-hidden="true"> </i>
                             </a>
                         </footer>

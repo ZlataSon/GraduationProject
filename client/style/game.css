@@ -13,6 +13,17 @@
     overflow: hidden;
 }
 
+.game-container h2 {
+    position: absolute;
+    top: 40px;
+    left: 180px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+    font-family: 'Spirax', cursive;
+    letter-spacing: 2px;
+    text-transform: capitalize;
+}
+
 .main-pane {
     padding: 5px;
     width: 416px;
@@ -211,72 +222,3 @@ li.watcher {
     border: 1px solid rgb(219, 218, 191);
 }
 
-/*!* Home style   *!*/
-
-/*.home-container {*/
-    /*margin: 0 auto;*/
-    /*overflow: hidden;*/
-    /*margin-top: 50px;*/
-    /*padding-left: 20px;*/
-    /*width: 256px;*/
-    /*box-shadow: inset 6px 0px 10px -10px;*/
-/*}*/
-
-/*.home-container .options {*/
-    /*margin-top: 20px;*/
-/*}*/
-
-/*.chess-option-tip {*/
-    /*color: #00BCD4;*/
-    /*margin-bottom: 15px;*/
-/*}*/
-
-/*.chess-white {*/
-    /*border: 1px solid #CCCCCC;*/
-    /*background-color: #FFFFFF;*/
-/*}*/
-
-/*.chess-black {*/
-    /*border: 1px solid #000000;*/
-    /*background-color: #000000;*/
-/*}*/
-
-/*.chess-btn {*/
-    /*width: 56px;*/
-    /*height: 56px;*/
-    /*border-radius: 50%;*/
-    /*margin: 15px;*/
-    /*cursor: pointer;*/
-    /*transition: all .2s ease-in-out;*/
-/*}*/
-
-/*.chess-btn:enabled:hover {*/
-    /*transform: scale(1.1);*/
-    /*box-shadow: 0px 0px 8px 4px #CCCCCC;*/
-/*}*/
-
-/*.chess-btn:focus {*/
-    /*outline: none;*/
-/*}*/
-
-/*.chess-btn:disabled {*/
-    /*border: 1px solid #CCCCCC;*/
-    /*background-color: #CCCCCC;*/
-    /*cursor: default;*/
-/*}*/
-
-/*.loading-info {*/
-    /*display: flex;*/
-    /*align-items: center;*/
-/*}*/
-
-/*.online-status {*/
-    /*margin-top: 50px;*/
-    /*display: flex;*/
-    /*align-items: center;*/
-/*}*/
-
-/*.online-status p {*/
-    /*padding: 5px;*/
-    /*font-size: 12px;*/
-/*}*/
