@@ -184,15 +184,15 @@ class Chat extends React.Component {
     render() {
         const messages = this.state.messages.map((msg,index)=> {
             console.log('out put message');
-            console.dir(this.state.sex);
+            console.dir(msg);
             return (
 
                 <li key={index}>
                     <p className="msg-title">
-                        {this.state.sex == "♂ Male" ?
+                        {msg.sex == "♂ Male" ?
                             <img src="../img/boy_icon_chart.png" alt=""/>
                             :
-                            this.state.sex == "♀ Female" ?
+                            msg.sex == "♀ Female" ?
                                 <img src="../img/girl_icon_chart.png" alt=""/>
                                 :
                                 <img src="../img/admin_icon.gif" alt=""/>
