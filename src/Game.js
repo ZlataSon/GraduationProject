@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import darkBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -22,9 +21,17 @@ export default class Game extends Component {
         console.dir(props);
         let a=[];
         for (let i = 0; i < BOARD_SIZE; i++) { a[i]=[];
-            for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = undefined; } }
+            for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = -1; } }
 
         this.state = {
+            gameID: props.gameID,
+            socket: props.socket,
+            name: props.user.name,
+            sex: props.user.sex,
+            connections:props.connections,
+
+            player1: '',
+            player2: '',
             targetX: 0,
             targetY: 0,
 
@@ -32,18 +39,83 @@ export default class Game extends Component {
             lastRow: -1,
             lastCol: -1,
             isFinished: false,
+            youWon: false,
+            youLost: false,
             canMove: true,
-            board: []
+            board: a
         };
 
-        this.move = this.move.bind(this);
+        this.myColor = '';
 
-        // Needed for onTouchTap fix Warning-Error
-        injectTapEventPlugin();
+        this.move = this.move.bind(this);
 
         this.quit = this.quit.bind(this);
     }
 
+    componentWillMount() {
+        this.state.socket.on("init-game-onclient", (game) => {
+            console.log('init game');
+            console.dir(game);
+            this.myColor = '';
+            const idx1 = this.state.connections.findIndex(function (conn) { return conn.socketID === game.player1 });
+            const idx2 = this.state.connections.findIndex(function (conn) { return conn.socketID === game.player2 });
+            this.setState({
+                gameID: game.gameID,
+                player1:this.state.connections[idx1].name,
+                player2:this.state.connections[idx2].name
+            });
+            if (game.player1 == this.state.socket.id) this.myColor = 0;
+            if (game.player2 == this.state.socket.id) this.myColor = 1;
+            // this.setState({messages: messages});
+        });
+
+        this.state.socket.on("showMove", (param) => {
+            console.log('Show move');
+            console.dir(param);
+            let {lastRow,lastCol,currentColor, board} = this.state;
+            let {row, col, color} = param;
+
+            currentColor = 1 - currentColor;
+            board[row][col] = color;
+            lastRow = row;
+            lastCol = col;
+
+            this.setState({lastRow, lastCol, currentColor, board});
+        });
+
+        this.state.socket.on("finish-game", (param) => {
+            console.log('Finish game');
+            console.dir(param);
+            let { isFinished } = param;
+            if (param.winner==this.state.socket.id) this.setState({youWon:true});
+            else this.setState({youLost:true});
+
+            // let {lastRow,lastCol,currentColor, board} = this.state;
+            // let {row, col, color} = param;
+            //
+            // currentColor = 1 - currentColor;
+            // board[row][col] = color;
+            // lastRow = row;
+            // lastCol = col;
+
+            this.setState({isFinished});
+        });
+
+        if (!this.state.gameID) {
+            const param = {gameID: this.props.params.gameID};
+            this.state.socket.emit("init-game-onclient",param);
+        }
+    }
+    componentWillUnmount() {
+        this.state.socket.off("init-game-onclient");
+        this.state.socket.off("showMove");
+        this.state.socket.off("finish-game");
+    }
+    componentWillReceiveProps (props) {
+        this.setState({
+            gameID: props.gameID
+        });
+    }
     getTargetPosition(e) {
         const rect = e.target.getBoundingClientRect();
 
@@ -66,14 +138,12 @@ export default class Game extends Component {
     }
 
     move(row, col) {
-        let {lastRow,lastCol,currentColor, board} = this.state;
-
-        currentColor = 1 - currentColor;
-        board[row][col] = currentColor;
-        lastRow = row;
-        lastCol = col;
-
-        this.setState({lastRow, lastCol, currentColor, board});
+        console.log('Move');
+        console.dir(this.state.gameID);
+        const color = this.myColor;
+        const gameID = this.state.gameID;
+        const param = {gameID, row, col, color};
+        this.state.socket.emit("move",param);
     }
 
     onClick(e) {
@@ -121,6 +191,9 @@ export default class Game extends Component {
         return (
             <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
             <div className='game-container'>
+                <h2>{this.state.player1} vs {this.state.player2}</h2>
+                {this.state.youWon? <h2>You Won !!!</h2> : null}
+                {this.state.youLost? <h2>You Lost !!!</h2> : null}
                 <div className='main-pane'>
                     <div className='left-pane'>
                         <div className='game-board'>
