@@ -10,7 +10,7 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 
 var port = '3000';
-app.set('port', port);
+app.set('port', (process.env.PORT || port));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
