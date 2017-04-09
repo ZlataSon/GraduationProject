@@ -25,7 +25,7 @@ export default class Game extends Component {
             for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = undefined; } }
 
         this.state = {
-            gameID: '',
+            gameID: props.gameID,
             socket: props.socket,
             name: props.user.name,
             sex: props.user.sex,
@@ -85,7 +85,7 @@ export default class Game extends Component {
             this.setState({lastRow, lastCol, currentColor, board});
         });
 
-        if (this.state.gameID=='') {
+        if (!this.state.gameID) {
             const param = {gameID: this.props.params.gameID};
             this.state.socket.emit("init-game-onclient",param);
         }
@@ -114,7 +114,11 @@ export default class Game extends Component {
         // this.state.socket.off("cancel-game");
         // this.state.socket.off("start-game");
     }
-
+    componentWillReceiveProps (props) {
+        this.setState({
+            gameID: props.gameID
+        });
+    }
     getTargetPosition(e) {
         const rect = e.target.getBoundingClientRect();
 
@@ -137,9 +141,11 @@ export default class Game extends Component {
     }
 
     move(row, col) {
-
-        let color = this.myColor;
-        const param = {row, col, color};
+        console.log('Move');
+        console.dir(this.state.gameID);
+        const color = this.myColor;
+        const gameID = this.state.gameID;
+        const param = {gameID, row, col, color};
         this.state.socket.emit("move",param);
     }
 
