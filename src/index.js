@@ -13,7 +13,7 @@ ReactDOM.render((
             <IndexRoute component={Login} />
             <Route path="/chat" component={Chat} />
             <Route path="/game" component={Game} />
-            <Route path="/game/:userID" component={Game} />
+            <Route path="/game/:gameID" component={Game} />
         </Route>
     </Router>),
      document.getElementById('root')

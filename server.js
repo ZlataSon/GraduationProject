@@ -80,10 +80,31 @@ ChatGameServer.prototype = {
             onlineCnt: this.connections.length
         };
     },
+    getUserByID: function (id) {
+        const idx = this.connections.findIndex(function (conn) { return conn.socketID === id });
+        return this.connections[idx];
+    }
 };
 
 var chat = new ChatGameServer();
 chat.init();
+
+function GameServer() {
+    this.gameID = '';
+    this.player1 = {};
+    this.player2 = {};
+}
+
+GameServer.prototype = {
+    init: function(gID, pl1,pl2) {
+        this.gameID = gID;
+        this.player1 = pl1;
+        this.player2 = pl2;
+    },
+};
+
+let gameOnServer = {};
+
 // -----------------------------------
 //  Socket.io
 // -----------------------------------
@@ -125,6 +146,47 @@ io.on('connection', function(socket){
         io.emit('receive-message',msg);
     });
 
+    socket.on('request-game', (param) => {
+        const opponent = param.player2;
+        const msg = {
+            id: param.player1,
+            name: chat.getUserByID(param.player1).name
+        };
+        socket.to(opponent).emit('accept-game', msg);
+    });
+
+    socket.on('accept-game', (param) => {
+        const opponent = param.player2;
+
+        let gameID = '';
+        do {
+            gameID = (Math.random().toString(10) + "000000000000").substr(2, 11);
+            var findID = gameOnServer[gameID];
+        } while (findID);
+
+        gameOnServer[gameID] = new GameServer();
+        gameOnServer[gameID].init(gameID, param.player1, param.player2);
+
+        io.to(socket.id).emit('start-game', gameID);
+        socket.to(opponent).emit('start-game', gameID);
+    });
+
+    socket.on('cancel-game', (param) => {
+        const opponent = param.player2;
+        io.to(socket.id).emit('cancel-game');
+        socket.to(opponent).emit('cancel-game');
+    });
+
+    socket.on('init-game-onclient', (param) => {
+        this.game = gameOnServer[param.gameID];
+        io.to(socket.id).emit('init-game-onclient',this.game);
+    });
+    socket.on('move', (param) => {
+        if (socket.id == this.game.player1) io.to(this.game.player1).emit('showMove',param);
+            else socket.to(this.game.player1).emit('showMove',param);
+        if (socket.id == this.game.player2) io.to(this.game.player2).emit('showMove',param);
+            else socket.to(this.game.player2).emit('showMove',param);
+    });
 });
 
 server.listen(port, function(){

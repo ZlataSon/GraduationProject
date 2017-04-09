@@ -8,10 +8,11 @@ class Chat extends React.Component {
         this.state = {
             smilebox: false,
             messages: [],
-            socket: this.props.socket,
+            socket: props.socket,
             name: props.user.name,
             sex: props.user.sex,
-            connections:props.connections
+            connections:props.connections,
+            gameInvite:{status:'', opponent:'', opponentID:''}
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -23,9 +24,24 @@ class Chat extends React.Component {
             messages.push(msg);
             this.setState({messages: messages});
         });
+        this.state.socket.on("accept-game", (msg) => {
+            this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:msg.id }});
+        });
+        this.state.socket.on("cancel-game", () => {
+            this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
+        });
+        this.state.socket.on("start-game", (gameID) => {
+            console.log('receive Start game');
+            const path = `/game/${gameID}`;
+            browserHistory.push(path);
+            //this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:'' }});
+        });
     }
     componentWillUnmount() {
         this.state.socket.off("receive-message");
+        this.state.socket.off("accept-game");
+        this.state.socket.off("cancel-game");
+        this.state.socket.off("start-game");
     }
     componentWillReceiveProps (props) {
         this.setState({
@@ -161,26 +177,52 @@ class Chat extends React.Component {
     viewSmileBox() {
         this.setState({smilebox: !this.state.smilebox});
     }
+
     pickUser() {
         const user = document.getElementById('user').value;
         this.setState({name: user});
     }
+
     playGame(socketID) {
-        console.log('press playGame');
-        //console.dir(event.tar);
-        console.dir(socketID);
-        // console.dir(noName);
+        if (this.state.gameInvite.status != '') return;
+        //console.log('press playGame');
         // console.dir(arguments);
         //const socketID = event.target.value;
         //const mySocketID = this.state.socket.id;
 
-        const path = `/game/${socketID}`;
-        browserHistory.push(path);
+        const param = {player1: this.state.socket.id, player2: socketID};
+        this.state.socket.emit("request-game",param);
 
+        const idx = this.state.connections.findIndex(function (conn) { return conn.socketID === socketID });
+        // console.log('press playGame');
+        // console.dir(this.state.connections[idx].name);
+        // console.dir(this.state.connections[idx].id);
+        // console.dir(this.state.connections);
+        this.setState({gameInvite: {
+            status:'send',
+            opponent:this.state.connections[idx].name,
+            opponentID:this.state.connections[idx].socketID
+        }});
     }
+
+    acceptGame(socketID) {
+        const param = {player1: this.state.socket.id, player2: socketID};
+        this.state.socket.emit("accept-game",param);
+        //this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
+    }
+
+    cancelGame(socketID) {
+        console.log('press cancel Game');
+        console.dir(socketID);
+        const param = {player1: this.state.socket.id, player2: socketID};
+        this.state.socket.emit("cancel-game",param);
+        //this.setState({gameInvite: {status:'', opponent:'', opponentID:'' }});
+    }
+
     handleChange(event) {
         this.setState({name: event.target.value});
     }
+
     render() {
         const messages = this.state.messages.map((msg,index)=> {
             console.log('out put message');
@@ -227,7 +269,21 @@ class Chat extends React.Component {
                     <a className="button" href="javascript:void(0)" onClick={()=> this.pickUser()}>
                         <i className="fa fa-floppy-o" aria-hidden="true"> </i>
                     </a>
-
+                    {this.state.gameInvite.status=='recive'?
+                        <div>
+                            <h3>Request on game from {this.state.gameInvite.opponent} ({this.state.gameInvite.opponentID})</h3>
+                            <a href="javascript:void(0)" className="button" onClick={this.acceptGame.bind(this,this.state.gameInvite.opponentID)}>Accept</a>
+                            <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>Cancel</a>
+                        </div>
+                        :
+                        this.state.gameInvite.status=='send'?
+                            <div>
+                                <h3>Wait for {this.state.gameInvite.opponent} ({this.state.gameInvite.opponentID})</h3>
+                                <a href="javascript:void(0)" className="button" onClick={this.cancelGame.bind(this,this.state.gameInvite.opponentID)}>Cancel</a>
+                            </div>
+                            :
+                            null
+                    }
                     <a  href="javascript:void(0)" className="open-private button" onClick={()=> this.openNav()}>Open Private</a>
                 </header>
 
@@ -247,7 +303,7 @@ class Chat extends React.Component {
                         </header>
 
                         <footer>
-                            <textarea id="message" autoComplete="off"/>
+                            <textarea id="messagePrivat" autoComplete="off"/>
                             <a className="button" href="javascript:void(0)" onClick={() => this.submitMessage()}>
                                 <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                             </a>

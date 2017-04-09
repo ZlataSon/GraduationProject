@@ -25,6 +25,14 @@ export default class Game extends Component {
             for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = undefined; } }
 
         this.state = {
+            gameID: '',
+            socket: props.socket,
+            name: props.user.name,
+            sex: props.user.sex,
+            connections:props.connections,
+
+            player1: '',
+            player2: '',
             targetX: 0,
             targetY: 0,
 
@@ -33,8 +41,10 @@ export default class Game extends Component {
             lastCol: -1,
             isFinished: false,
             canMove: true,
-            board: []
+            board: a
         };
+
+        this.myColor = '';
 
         this.move = this.move.bind(this);
 
@@ -42,6 +52,67 @@ export default class Game extends Component {
         injectTapEventPlugin();
 
         this.quit = this.quit.bind(this);
+    }
+
+    componentWillMount() {
+        this.state.socket.on("init-game-onclient", (game) => {
+            console.log('init game');
+            console.dir(game);
+            this.myColor = '';
+            const idx1 = this.state.connections.findIndex(function (conn) { return conn.socketID === game.player1 });
+            const idx2 = this.state.connections.findIndex(function (conn) { return conn.socketID === game.player2 });
+            this.setState({
+                gameID: game.gameID,
+                player1:this.state.connections[idx1].name,
+                player2:this.state.connections[idx2].name
+            });
+            if (game.player1 == this.state.socket.id) this.myColor = 0;
+            if (game.player2 == this.state.socket.id) this.myColor = 1;
+            // this.setState({messages: messages});
+        });
+
+        this.state.socket.on("showMove", (param) => {
+            console.log('Show move');
+            console.dir(param);
+            let {lastRow,lastCol,currentColor, board} = this.state;
+            let {row, col, color} = param;
+
+            currentColor = 1 - currentColor;
+            board[row][col] = color;
+            lastRow = row;
+            lastCol = col;
+
+            this.setState({lastRow, lastCol, currentColor, board});
+        });
+
+        if (this.state.gameID=='') {
+            const param = {gameID: this.props.params.gameID};
+            this.state.socket.emit("init-game-onclient",param);
+        }
+    //componentDidMount () {
+        // this.state.socket.on("receive-message", (msg) => {
+        //     const messages = this.state.messages;
+        //     messages.push(msg);
+        //     this.setState({messages: messages});
+        // });
+        // this.state.socket.on("accept-game", (msg) => {
+        //     this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:msg.id }});
+        // });
+        // this.state.socket.on("cancel-game", () => {
+        //     this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
+        // });
+        // this.state.socket.on("start-game", (gameID) => {
+        //     console.log('receive Start game');
+        //     const path = `/game/${gameID}`;
+        //     browserHistory.push(path);
+        //     //this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:'' }});
+        // });
+    }
+    componentWillUnmount() {
+        this.state.socket.off("init-game-onclient");
+        this.state.socket.off("showMove");
+        // this.state.socket.off("cancel-game");
+        // this.state.socket.off("start-game");
     }
 
     getTargetPosition(e) {
@@ -66,14 +137,10 @@ export default class Game extends Component {
     }
 
     move(row, col) {
-        let {lastRow,lastCol,currentColor, board} = this.state;
 
-        currentColor = 1 - currentColor;
-        board[row][col] = currentColor;
-        lastRow = row;
-        lastCol = col;
-
-        this.setState({lastRow, lastCol, currentColor, board});
+        let color = this.myColor;
+        const param = {row, col, color};
+        this.state.socket.emit("move",param);
     }
 
     onClick(e) {
@@ -121,6 +188,7 @@ export default class Game extends Component {
         return (
             <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
             <div className='game-container'>
+                <h3>{this.state.player1} vs {this.state.player2}</h3>
                 <div className='main-pane'>
                     <div className='left-pane'>
                         <div className='game-board'>
