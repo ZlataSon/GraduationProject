@@ -4,7 +4,6 @@
   "description": "Graduation project for GeekHub",
   "main": "index.js",
   "scripts": {
-    "prestart": "webpack",
     "start": "node server.js"
   },
   "repository": {
