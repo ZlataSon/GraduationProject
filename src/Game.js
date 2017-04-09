@@ -191,9 +191,10 @@ export default class Game extends Component {
         return (
             <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
             <div className='game-container'>
-                <h2>{this.state.player1} & {this.state.player2}</h2>
-                {this.state.youWon? <h2>You Won !!!</h2> : null}
-                {this.state.youLost? <h2>You Lost !!!</h2> : null}
+                <h2><span>{this.state.player1} & {this.state.player2} </span>
+                {this.state.youWon? <span> / You Won !!!</span> : null}
+                {this.state.youLost? <span> / You Lost !!!</span> : null}
+                </h2>
                 <div className='main-pane'>
                     <div className='left-pane'>
                         <div className='game-board'>
