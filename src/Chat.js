@@ -347,7 +347,7 @@ class Chat extends React.Component {
                             :
                             null
                     }
-                    <a  href="javascript:void(0)" className="open-private button" onClick={()=> this.openNav()}>Open Private</a>
+                    (/*<a  href="javascript:void(0)" className="open-private button" onClick={()=> this.openNav()}>Open Private</a>*/}
                 </header>
 
                 <main>
