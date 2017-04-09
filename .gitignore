@@ -8,6 +8,3 @@ node_modules
 logs
 *.log
 npm-debug.log*
-
-# Compiled bundle
-bundle.js
