@@ -93,6 +93,7 @@ function GameServer() {
     this.gameID = '';
     this.player1 = {};
     this.player2 = {};
+    this.color = 0;
 }
 
 GameServer.prototype = {
@@ -101,9 +102,17 @@ GameServer.prototype = {
         this.player1 = pl1;
         this.player2 = pl2;
     },
+    move: function (row, col, color) {
+        if (this.color==color) {
+
+            this.color = 1 - color;
+            return true;
+        } else return false;
+
+    }
 };
 
-let gameOnServer = {};
+var gameOnServer = {};
 
 // -----------------------------------
 //  Socket.io
@@ -182,10 +191,14 @@ io.on('connection', function(socket){
         io.to(socket.id).emit('init-game-onclient',this.game);
     });
     socket.on('move', (param) => {
-        if (socket.id == this.game.player1) io.to(this.game.player1).emit('showMove',param);
-            else socket.to(this.game.player1).emit('showMove',param);
-        if (socket.id == this.game.player2) io.to(this.game.player2).emit('showMove',param);
-            else socket.to(this.game.player2).emit('showMove',param);
+        console.dir(gameOnServer);
+        console.dir(param.gameID);
+        if (gameOnServer[param.gameID].move(param.row, param.col, param.color)) {
+            if (socket.id == this.game.player1) io.to(this.game.player1).emit('showMove', param);
+            else socket.to(this.game.player1).emit('showMove', param);
+            if (socket.id == this.game.player2) io.to(this.game.player2).emit('showMove', param);
+            else socket.to(this.game.player2).emit('showMove', param);
+        }
     });
 });
 
