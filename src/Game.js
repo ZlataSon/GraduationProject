@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import darkBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -22,7 +21,7 @@ export default class Game extends Component {
         console.dir(props);
         let a=[];
         for (let i = 0; i < BOARD_SIZE; i++) { a[i]=[];
-            for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = undefined; } }
+            for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = -1; } }
 
         this.state = {
             gameID: props.gameID,
@@ -40,6 +39,8 @@ export default class Game extends Component {
             lastRow: -1,
             lastCol: -1,
             isFinished: false,
+            youWon: false,
+            youLost: false,
             canMove: true,
             board: a
         };
@@ -47,9 +48,6 @@ export default class Game extends Component {
         this.myColor = '';
 
         this.move = this.move.bind(this);
-
-        // Needed for onTouchTap fix Warning-Error
-        injectTapEventPlugin();
 
         this.quit = this.quit.bind(this);
     }
@@ -85,34 +83,33 @@ export default class Game extends Component {
             this.setState({lastRow, lastCol, currentColor, board});
         });
 
+        this.state.socket.on("finish-game", (param) => {
+            console.log('Finish game');
+            console.dir(param);
+            let { isFinished } = param;
+            if (param.winner==this.state.socket.id) this.setState({youWon:true});
+            else this.setState({youLost:true});
+
+            // let {lastRow,lastCol,currentColor, board} = this.state;
+            // let {row, col, color} = param;
+            //
+            // currentColor = 1 - currentColor;
+            // board[row][col] = color;
+            // lastRow = row;
+            // lastCol = col;
+
+            this.setState({isFinished});
+        });
+
         if (!this.state.gameID) {
             const param = {gameID: this.props.params.gameID};
             this.state.socket.emit("init-game-onclient",param);
         }
-    //componentDidMount () {
-        // this.state.socket.on("receive-message", (msg) => {
-        //     const messages = this.state.messages;
-        //     messages.push(msg);
-        //     this.setState({messages: messages});
-        // });
-        // this.state.socket.on("accept-game", (msg) => {
-        //     this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:msg.id }});
-        // });
-        // this.state.socket.on("cancel-game", () => {
-        //     this.setState({gameInvite: {status:'', opponent:'', opponentID:''}});
-        // });
-        // this.state.socket.on("start-game", (gameID) => {
-        //     console.log('receive Start game');
-        //     const path = `/game/${gameID}`;
-        //     browserHistory.push(path);
-        //     //this.setState({gameInvite: {status:'recive', opponent:msg.name, opponentID:'' }});
-        // });
     }
     componentWillUnmount() {
         this.state.socket.off("init-game-onclient");
         this.state.socket.off("showMove");
-        // this.state.socket.off("cancel-game");
-        // this.state.socket.off("start-game");
+        this.state.socket.off("finish-game");
     }
     componentWillReceiveProps (props) {
         this.setState({
@@ -194,7 +191,9 @@ export default class Game extends Component {
         return (
             <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
             <div className='game-container'>
-                <h3>{this.state.player1} vs {this.state.player2}</h3>
+                <h2>{this.state.player1} vs {this.state.player2}</h2>
+                {this.state.youWon? <h2>You Won !!!</h2> : null}
+                {this.state.youLost? <h2>You Lost !!!</h2> : null}
                 <div className='main-pane'>
                     <div className='left-pane'>
                         <div className='game-board'>

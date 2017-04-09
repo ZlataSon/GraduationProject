@@ -89,11 +89,16 @@ ChatGameServer.prototype = {
 var chat = new ChatGameServer();
 chat.init();
 
+const BOARD_SIZE = 15;
+
 function GameServer() {
     this.gameID = '';
     this.player1 = {};
     this.player2 = {};
     this.color = 0;
+    this.isFinished = false;
+    this.board = [];
+    this.winner = undefined;
 }
 
 GameServer.prototype = {
@@ -101,14 +106,83 @@ GameServer.prototype = {
         this.gameID = gID;
         this.player1 = pl1;
         this.player2 = pl2;
-    },
-    move: function (row, col, color) {
-        if (this.color==color) {
 
+        let a=[];
+        for (let i = 0; i < BOARD_SIZE; i++) { a[i]=[];
+            for (let j = 0; j < BOARD_SIZE; j++) { a[i][j] = -1; } }
+        this.board = a;
+        this.isFinished = false;
+
+    },
+    move: function (row, col, color, player) {
+        if (this.color==color && !this.isFinished) {
+            if (this.board[row][col]!=-1)  return false;
+            if (this.isBoardFull()) return false;
+
+            this.board[row][col] = this.color;
+            if (this.hasWinner(row,col,this.color)) {
+                this.isFinished = true;
+                this.winner = player;
+            }
             this.color = 1 - color;
             return true;
         } else return false;
 
+    },
+    isBoardFull: function() {
+        for (var i = 0; i < BOARD_SIZE; i++) {
+            for (var j = 0; j < BOARD_SIZE; j++) {
+                if (this.board[i][j] === -1) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    },
+    hasWinner: function(row, col, color) {
+        let i = 0, j = 0, n1 = 0, n2 = 0;
+
+        // Check horizontal
+        i = row; j = col - 1; n1 = 0;
+        while (j >= 0 && this.board[i][j] === color) { n1++; j--; }
+
+        j = col + 1; n2 = 0;
+        while (j < BOARD_SIZE && this.board[i][j] === color) { n2++; j++ }
+
+        if (n1 + n2 >= 4) return true;
+
+        // Check vertical
+        i = row - 1; j = col; n1 = 0;
+        while (i >= 0 && this.board[i][j] === color) { n1++; i--; }
+
+        i = row + 1; n2 = 0;
+        while (i < BOARD_SIZE && this.board[i][j] === color) { n2++; i++ }
+
+        if (n1 + n2 >= 4) return true;
+
+        // Check diagonal
+        i = row - 1; j = col - 1; n1 = 0;
+        while (i >= 0 && j >= 0 && this.board[i][j] === color) { n1++; i--; j--; }
+
+        i = row + 1; j = col + 1; n2 = 0;
+        while (i < BOARD_SIZE && j < BOARD_SIZE && this.board[i][j] === color) { n2++; i++; j++; }
+
+        if (n1 + n2 >= 4) return true;
+
+        // Check reverse diagonal
+        i = row - 1; j = col + 1; n1 = 0;
+        while (i >= 0 && j < BOARD_SIZE && this.board[i][j] === color) { n1++; i--; j++; }
+
+        i = row + 1; j = col - 1; n2 = 0;
+        while (i < BOARD_SIZE && j >= 0 && this.board[i][j] === color) { n2++; i++; j--; }
+
+        if (n1 + n2 >= 4) return true;
+
+        return false;
+    },
+    getWinner: function() {
+        if (this.isFinished) return this.winner;
+        else return undefined;
     }
 };
 
@@ -187,17 +261,29 @@ io.on('connection', function(socket){
     });
 
     socket.on('init-game-onclient', (param) => {
-        this.game = gameOnServer[param.gameID];
-        io.to(socket.id).emit('init-game-onclient',this.game);
+        let game = gameOnServer[param.gameID];
+        io.to(socket.id).emit('init-game-onclient',game);
     });
     socket.on('move', (param) => {
+        if (!param.gameID) return '';
+        let game = gameOnServer[param.gameID];
+        console.log('move');
         console.dir(gameOnServer);
         console.dir(param.gameID);
-        if (gameOnServer[param.gameID].move(param.row, param.col, param.color)) {
-            if (socket.id == this.game.player1) io.to(this.game.player1).emit('showMove', param);
-            else socket.to(this.game.player1).emit('showMove', param);
-            if (socket.id == this.game.player2) io.to(this.game.player2).emit('showMove', param);
-            else socket.to(this.game.player2).emit('showMove', param);
+        if (game.move(param.row, param.col, param.color, socket.id)) {
+            if (socket.id == game.player1) io.to(game.player1).emit('showMove', param);
+            else socket.to(game.player1).emit('showMove', param);
+            if (socket.id == game.player2) io.to(game.player2).emit('showMove', param);
+            else socket.to(game.player2).emit('showMove', param);
+
+            let winner = game.getWinner();
+            if (winner) {
+                param.winner = winner;
+                if (socket.id == game.player1) io.to(game.player1).emit('finish-game', param);
+                else socket.to(game.player1).emit('finish-game', param);
+                if (socket.id == game.player2) io.to(game.player2).emit('finish-game', param);
+                else socket.to(game.player2).emit('finish-game', param);
+            }
         }
     });
 });
