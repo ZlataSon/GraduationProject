@@ -312,7 +312,7 @@ button:active,
     color: #6e6e6e;
     border-radius: 25px;
     width: 75%;
-    white-space: normal;
+    white-space: pre-line;
 }
 
 #messages-private li p {
