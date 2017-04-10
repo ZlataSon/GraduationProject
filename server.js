@@ -5,7 +5,9 @@
 var express = require('express'),
     app = express.createServer(express.logger()),
     io = require('socket.io').listen(app);
-
+//**************************************************
+//      heroku features:enable http-session-affinity
+//**************************************************
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
