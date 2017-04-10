@@ -19781,16 +19781,7 @@ var Chat = function (_React$Component) {
                                 ' '
                             )
                         )
-                    ) : null,
-                    '(/*',
-                    _react2.default.createElement(
-                        'a',
-                        { href: 'javascript:void(0)', className: 'open-private button', onClick: function onClick() {
-                                return _this3.openNav();
-                            } },
-                        'Open Private'
-                    ),
-                    '*/}'
+                    ) : null
                 ),
                 _react2.default.createElement(
                     'main',
