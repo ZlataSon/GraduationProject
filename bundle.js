@@ -19262,9 +19262,13 @@ var App = function (_Component) {
     _createClass(App, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
+            console.log('Mount App-component');
+            console.dir(window.location.hostname);
             //this.socket = io('http://localhost:3000');
             //this.socket = io('https://graduation-project.herokuapp.com');
-            this.socket = (0, _socket2.default)('window.location.hostname');
+            var host = '';
+            if (window.location.hostname == 'localhost') host = 'http://localhost:3000';else host = 'https://graduation-project.herokuapp.com';
+            this.socket = (0, _socket2.default)(host);
             this.socket.on('connect', this.connect.bind(this));
             this.socket.on('disconnect', this.disconnect.bind(this));
             this.socket.on('updateConnection', this.updateConnection.bind(this));

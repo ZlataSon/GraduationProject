@@ -13,7 +13,7 @@ var io = require('socket.io')(server);
 //      heroku features:enable http-session-affinity
 //**************************************************
 //io.configure(function () {
-    io.set("transports", ["xhr-polling"]);
+//    io.set("transports", ["xhr-polling"]);
 //    io.set("polling duration", 10);
 //});
 
