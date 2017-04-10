@@ -260,6 +260,8 @@ button:active,
 .button.disable {
     background: #d0cfd6;
     color: #afafaf;
+    border: 1px solid #afafaf;
+    cursor: default;
 }
 
 .button.disable:hover,
@@ -267,6 +269,7 @@ button:active,
 .button.disable:active {
     transform: none;
     box-shadow: none;
+    cursor: default;
 }
 
 .button.sm-button.disable .fa {

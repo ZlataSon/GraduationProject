@@ -19428,9 +19428,25 @@ var Chat = function (_React$Component) {
     }
 
     _createClass(Chat, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {}
+    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
             var _this2 = this;
+
+            if (!this.props.user.name) {
+                //this.context.router.push('/');
+                if (window.performance.navigation.type == 1) {
+                    _reactRouter.browserHistory.push('/');
+                }
+            }
+            // console.log('Component Chat will mount');
+            // console.dir(this.props);
+            // console.dir(this.state);
+            // if (this.props.user.name=='') console.log('************ NEED LOGIN **************');
+            // const path = `/`;
+            // browserHistory.push(path);
 
             this.state.socket.on("receive-message", function (msg) {
                 var messages = _this2.state.messages;
@@ -19480,6 +19496,16 @@ var Chat = function (_React$Component) {
                 sex: props.user.sex,
                 connections: props.connections
             });
+        }
+    }, {
+        key: 'componentWillUpdate',
+        value: function componentWillUpdate(props, state) {
+            console.log('*******Component Chat will update');
+            console.dir(props);
+            console.dir(state);
+            // if (this.props.user.name=='') console.log('************ NEED LOGIN **************');
+            // const path = `/`;
+            // browserHistory.push(path);
         }
     }, {
         key: 'submitMessagePrivate',
@@ -49343,7 +49369,6 @@ _reactDom2.default.render(_react2.default.createElement(
         { path: '/', component: _App2.default },
         _react2.default.createElement(_reactRouter.IndexRoute, { component: _Login2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/chat', component: _Chat2.default }),
-        _react2.default.createElement(_reactRouter.Route, { path: '/game', component: _Game2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/game/:gameID', component: _Game2.default })
     )
 ), document.getElementById('root'));

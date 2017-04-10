@@ -12,7 +12,6 @@ ReactDOM.render((
         <Route path="/" component={App}>
             <IndexRoute component={Login} />
             <Route path="/chat" component={Chat} />
-            <Route path="/game" component={Game} />
             <Route path="/game/:gameID" component={Game} />
         </Route>
     </Router>),
