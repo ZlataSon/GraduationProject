@@ -4,10 +4,24 @@ var app = express();
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
-var http = require('http');
+//var http = require('http');
 
-var server = http.createServer(app);
+//var server = http.createServer(app);
+//var io = require('socket.io')(server);
+
+var https        = require('https');
+var server = https.createServer({
+    key: fs.readFileSync('./test_key.key'),
+    cert: fs.readFileSync('./test_cert.crt'),
+    ca: fs.readFileSync('./test_ca.crt'),
+    requestCert: false,
+    rejectUnauthorized: false
+},app);
+
 var io = require('socket.io')(server);
+
+
+
 
 var port = (process.env.PORT || '3000');
 app.set('port', port);

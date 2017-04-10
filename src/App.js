@@ -15,7 +15,8 @@ export default class App extends Component {
     }
 
     componentWillMount() {
-        this.socket = io('http://localhost:3000');
+        //this.socket = io('http://localhost:3000');
+        this.socket = io('https://graduation-project.herokuapp.com');
         this.socket.on('connect', this.connect.bind(this));
         this.socket.on('disconnect', this.disconnect.bind(this));
         this.socket.on('updateConnection', this.updateConnection.bind(this));
