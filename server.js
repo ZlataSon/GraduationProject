@@ -1,7 +1,13 @@
-var fs = require('fs');
-var express = require('express');
-var app = express();
+// var fs = require('fs');
+// var express = require('express');
+// var app = express();
 
+var express = require('express'),
+    app = express.createServer(express.logger()),
+    io = require('socket.io').listen(app);
+//**************************************************
+//      heroku features:enable http-session-affinity
+//**************************************************
 var path = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
@@ -10,16 +16,16 @@ var bodyParser = require('body-parser');
 // var server = https.createServer(app);
 // var io = require('socket.io')(server);
 
-var https        = require('https');
-var server = https.createServer({
-    key: fs.readFileSync('./test_key.key'),
-    cert: fs.readFileSync('./test_cert.crt'),
-    ca: fs.readFileSync('./test_ca.crt'),
-    requestCert: false,
-    rejectUnauthorized: false
-},app);
-
-var io = require('socket.io')(server);
+// var https        = require('https');
+// var server = https.createServer({
+//     key: fs.readFileSync('./test_key.key'),
+//     cert: fs.readFileSync('./test_cert.crt'),
+//     ca: fs.readFileSync('./test_ca.crt'),
+//     requestCert: false,
+//     rejectUnauthorized: false
+// },app);
+//
+// var io = require('socket.io')(server);
 
 
 
@@ -316,6 +322,7 @@ io.on('connection', function(socket){
     });
 });
 
-server.listen(port, function(){
+//server.listen(port, function(){
+app.listen(port, function(){
     console.log('listening on *:',port);
 });

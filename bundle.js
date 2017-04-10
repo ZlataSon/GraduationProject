@@ -19263,7 +19263,8 @@ var App = function (_Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             //this.socket = io('http://localhost:3000');
-            this.socket = (0, _socket2.default)('https://graduation-project.herokuapp.com');
+            //this.socket = io('https://graduation-project.herokuapp.com');
+            this.socket = (0, _socket2.default)('window.location.hostname');
             this.socket.on('connect', this.connect.bind(this));
             this.socket.on('disconnect', this.disconnect.bind(this));
             this.socket.on('updateConnection', this.updateConnection.bind(this));
