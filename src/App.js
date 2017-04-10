@@ -9,14 +9,14 @@ export default class App extends Component {
         this.state = {
             connections: [],
             onlineCnt: 0
-        }
+        };
         // Needed for onTouchTap fix Warning-Error
         injectTapEventPlugin();
     }
 
     componentWillMount() {
-        console.log('Mount App-component');
-        console.dir(window.location.hostname);
+        // console.log('Mount App-component');
+        // console.dir(window.location.hostname);
         //this.socket = io('http://localhost:3000');
         //this.socket = io('https://graduation-project.herokuapp.com');
         let host = '';
@@ -65,14 +65,6 @@ export default class App extends Component {
         this.socket.emit(eventName, payload);
     }
 
-    connect() {
-
-    }
-
-    disconnect() {
-
-    }
-
     updateConnection(Connections) {
         console.log('updateConection');
         const { connections, onlineCnt} = Connections;
@@ -86,12 +78,7 @@ export default class App extends Component {
     render() {
         const {children} = this.props;
         const {connections, onlineCnt} = this.state;
-        console.log('Render App');
-        console.dir(this.props.children);
-        console.dir(connections);
         var childrenWithProps = React.Children.map(children, (child) => {
-            console.log('App: maped children');
-            console.dir(child);
             return React.cloneElement(child, {
                 emit: this.emit.bind(this),
                 user: this.getCurrentUser(),
