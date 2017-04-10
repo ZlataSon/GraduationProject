@@ -19753,7 +19753,8 @@ var Chat = function (_React$Component) {
             opponent: "",
             opponentID: "",
             connections: props.connections,
-            gameInvite: { status: '', opponent: '', opponentID: '' }
+            gameInvite: { status: '', opponent: '', opponentID: '' },
+            activeInput: 'public'
         };
 
         _this.handleChange = _this.handleChange.bind(_this);
@@ -19878,8 +19879,13 @@ var Chat = function (_React$Component) {
     }, {
         key: 'pressIcon',
         value: function pressIcon(icon) {
-            var text = document.getElementById("message").value;
-            document.getElementById("message").value = text + ' //' + icon + '// ';
+            if (this.state.activeInput == 'public') {
+                var text = document.getElementById("message").value;
+                document.getElementById("message").value = text + ' //' + icon + '// ';
+            } else if (this.state.activeInput == 'private') {
+                var _text = document.getElementById("message-private").value;
+                document.getElementById("message-private").value = _text + ' //' + icon + '// ';
+            }
         }
 
         /* Set the width of the side navigation to 300px */
@@ -19901,6 +19907,7 @@ var Chat = function (_React$Component) {
     }, {
         key: 'closeNav',
         value: function closeNav() {
+            this.setState({ activeInput: 'public' });
             document.getElementById("mySidenav").style.width = "0";
         }
     }, {
@@ -19911,8 +19918,8 @@ var Chat = function (_React$Component) {
         }
     }, {
         key: 'viewSmileBox',
-        value: function viewSmileBox() {
-            this.setState({ smilebox: !this.state.smilebox });
+        value: function viewSmileBox(activeInput) {
+            this.setState({ smilebox: !this.state.smilebox, activeInput: activeInput });
         }
     }, {
         key: 'pickUser',
@@ -19956,6 +19963,13 @@ var Chat = function (_React$Component) {
         key: 'handleChange',
         value: function handleChange(event) {
             this.setState({ name: event.target.value });
+        }
+    }, {
+        key: 'onFocus',
+        value: function onFocus(activeInput) {
+            console.log('on focus');
+            console.dir(activeInput);
+            this.setState({ activeInput: activeInput });
         }
     }, {
         key: 'render',
@@ -20191,7 +20205,7 @@ var Chat = function (_React$Component) {
                         _react2.default.createElement(
                             'footer',
                             null,
-                            _react2.default.createElement('textarea', { id: 'message-private', autoComplete: 'off' }),
+                            _react2.default.createElement('textarea', { id: 'message-private', autoComplete: 'off', onFocus: this.onFocus.bind(this, 'private') }),
                             _react2.default.createElement(
                                 'a',
                                 { className: 'button', href: 'javascript:void(0)', onClick: this.submitMessagePrivate },
@@ -20203,7 +20217,7 @@ var Chat = function (_React$Component) {
                             ),
                             _react2.default.createElement(
                                 'a',
-                                { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox },
+                                { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox.bind(this, 'private') },
                                 _react2.default.createElement(
                                     'i',
                                     { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
@@ -20797,7 +20811,7 @@ var Chat = function (_React$Component) {
                             ' '
                         )
                     ),
-                    _react2.default.createElement('textarea', { id: 'message', autoComplete: 'off' }),
+                    _react2.default.createElement('textarea', { id: 'message', autoComplete: 'off', onFocus: this.onFocus.bind(this, 'public') }),
                     _react2.default.createElement(
                         'a',
                         { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
@@ -20811,9 +20825,7 @@ var Chat = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { className: 'button smile', href: 'javascript:void(0)', onClick: function onClick() {
-                                return _this3.viewSmileBox();
-                            } },
+                        { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox.bind(this, 'public') },
                         _react2.default.createElement(
                             'i',
                             { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
@@ -21244,6 +21256,13 @@ var Login = function (_Component) {
     }
 
     _createClass(Login, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            if (window.performance.navigation.type == 1) {
+                _reactRouter.browserHistory.push('/');
+            }
+        }
+    }, {
         key: 'login',
         value: function login() {
             var emit = this.props.emit;
