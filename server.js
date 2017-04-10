@@ -288,9 +288,6 @@ io.on('connection', function(socket){
     socket.on('move', (param) => {
         if (!param.gameID) return '';
         let game = gameOnServer[param.gameID];
-        console.log('move');
-        console.dir(gameOnServer);
-        console.dir(param.gameID);
         if (game.move(param.row, param.col, param.color, socket.id)) {
             if (socket.id == game.player1) io.to(game.player1).emit('showMove', param);
             else socket.to(game.player1).emit('showMove', param);

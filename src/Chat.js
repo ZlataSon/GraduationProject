@@ -30,17 +30,10 @@ class Chat extends React.Component {
     componentDidMount () {
 
         if (!this.props.user.name) {
-            //this.context.router.push('/');
             if (window.performance.navigation.type == 1) {
                 browserHistory.push('/');
             }
         }
-        // console.log('Component Chat will mount');
-        // console.dir(this.props);
-        // console.dir(this.state);
-        // if (this.props.user.name=='') console.log('************ NEED LOGIN **************');
-        // const path = `/`;
-        // browserHistory.push(path);
 
         this.state.socket.on("receive-message", (msg) => {
             const messages = this.state.messages;
