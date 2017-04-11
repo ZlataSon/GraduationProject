@@ -19425,11 +19425,11 @@ var Chat = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            if (!this.props.user.name) {
-                if (window.performance.navigation.type == 1) {
-                    _reactRouter.browserHistory.push('/');
-                }
-            }
+            // if (!this.props.user.name) {
+            //     if (window.performance.navigation.type == 1) {
+            //         browserHistory.push('/');
+            //     }
+            // }
 
             this.state.socket.on("receive-message", function (msg) {
                 var messages = _this2.state.messages;
@@ -20601,18 +20601,18 @@ var Game = function (_Component) {
         return _this;
     }
 
+    // componentDidMount() {
+    //     console.log('did mount component Game');
+    //     console.dir(this.props);
+    //     if (!this.props.user.name) {
+    //         if (window.performance.navigation.type == 1) {
+    //             browserHistory.push('/');
+    //         }
+    //     }
+    // }
+
+
     _createClass(Game, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            console.log('did mount component Game');
-            console.dir(this.props);
-            if (!this.props.user.name) {
-                if (window.performance.navigation.type == 1) {
-                    _reactRouter.browserHistory.push('/');
-                }
-            }
-        }
-    }, {
         key: 'componentWillMount',
         value: function componentWillMount() {
             var _this2 = this;
@@ -20909,13 +20909,6 @@ var Login = function (_Component) {
     }
 
     _createClass(Login, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            if (window.performance.navigation.type == 1) {
-                _reactRouter.browserHistory.push('/');
-            }
-        }
-    }, {
         key: 'login',
         value: function login() {
             var emit = this.props.emit;

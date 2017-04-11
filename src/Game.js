@@ -52,15 +52,15 @@ export default class Game extends Component {
         this.quit = this.quit.bind(this);
     }
 
-    componentDidMount() {
-        console.log('did mount component Game');
-        console.dir(this.props);
-        if (!this.props.user.name) {
-            if (window.performance.navigation.type == 1) {
-                browserHistory.push('/');
-            }
-        }
-    }
+    // componentDidMount() {
+    //     console.log('did mount component Game');
+    //     console.dir(this.props);
+    //     if (!this.props.user.name) {
+    //         if (window.performance.navigation.type == 1) {
+    //             browserHistory.push('/');
+    //         }
+    //     }
+    // }
     componentWillMount() {
         this.state.socket.on("init-game-onclient", (game) => {
             console.log('init game');
