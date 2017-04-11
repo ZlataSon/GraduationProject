@@ -19269,15 +19269,11 @@ var App = function (_Component) {
             var host = '';
             if (window.location.hostname == 'localhost') host = 'http://localhost:3000';else host = 'https://graduation-project.herokuapp.com';
             this.socket = (0, _socket2.default)(host);
-            // this.socket.on('connect', this.connect.bind(this));
-            // this.socket.on('disconnect', this.disconnect.bind(this));
             this.socket.on('updateConnection', this.updateConnection.bind(this));
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            // this.socket.off('connect');
-            // this.socket.off('disconnect');
             this.socket.off('updateConnection');
         }
     }, {
@@ -19425,11 +19421,11 @@ var Chat = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            // if (!this.props.user.name) {
-            //     if (window.performance.navigation.type == 1) {
-            //         browserHistory.push('/');
-            //     }
-            // }
+            if (!this.props.user.name) {
+                if (window.performance.navigation.type == 1) {
+                    _reactRouter.browserHistory.push('/');
+                }
+            }
 
             this.state.socket.on("receive-message", function (msg) {
                 var messages = _this2.state.messages;

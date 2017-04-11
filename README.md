@@ -1,7 +1,7 @@
 # Graduation Project (Socket.io chat and ReactJS game "Five in line")
 Graduation project for GeekHub - WATER CHAT (online speaking chat with game "Five in line" by Zlata Son & Evgen S.)
 
-You can see project here - https://js-graduation-project.herokuapp.com/
+You can see project here - https://graduation-project.herokuapp.com/
 
 #### Part 1 (Zlata Son): Chat on sockets - specs
 

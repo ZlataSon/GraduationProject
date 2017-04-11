@@ -23,14 +23,10 @@ export default class App extends Component {
         if (window.location.hostname=='localhost') host = 'http://localhost:3000';
         else host = 'https://graduation-project.herokuapp.com';
         this.socket = io(host);
-        // this.socket.on('connect', this.connect.bind(this));
-        // this.socket.on('disconnect', this.disconnect.bind(this));
         this.socket.on('updateConnection', this.updateConnection.bind(this));
     }
 
     componentWillUnmount() {
-        // this.socket.off('connect');
-        // this.socket.off('disconnect');
         this.socket.off('updateConnection');
     }
 

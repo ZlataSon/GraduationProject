@@ -30,11 +30,11 @@ class Chat extends React.Component {
     }
     componentDidMount () {
 
-        // if (!this.props.user.name) {
-        //     if (window.performance.navigation.type == 1) {
-        //         browserHistory.push('/');
-        //     }
-        // }
+        if (!this.props.user.name) {
+            if (window.performance.navigation.type == 1) {
+                browserHistory.push('/');
+            }
+        }
 
         this.state.socket.on("receive-message", (msg) => {
             const messages = this.state.messages;
