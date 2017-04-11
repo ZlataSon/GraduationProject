@@ -19269,15 +19269,15 @@ var App = function (_Component) {
             var host = '';
             if (window.location.hostname == 'localhost') host = 'http://localhost:3000';else host = 'https://graduation-project.herokuapp.com';
             this.socket = (0, _socket2.default)(host);
-            this.socket.on('connect', this.connect.bind(this));
-            this.socket.on('disconnect', this.disconnect.bind(this));
+            // this.socket.on('connect', this.connect.bind(this));
+            // this.socket.on('disconnect', this.disconnect.bind(this));
             this.socket.on('updateConnection', this.updateConnection.bind(this));
         }
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            this.socket.off('connect');
-            this.socket.off('disconnect');
+            // this.socket.off('connect');
+            // this.socket.off('disconnect');
             this.socket.off('updateConnection');
         }
     }, {
@@ -20904,6 +20904,13 @@ var Login = function (_Component) {
     }
 
     _createClass(Login, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            if (window.performance.navigation.type == 1) {
+                _reactRouter.browserHistory.push('/');
+            }
+        }
+    }, {
         key: 'login',
         value: function login() {
             var emit = this.props.emit;
