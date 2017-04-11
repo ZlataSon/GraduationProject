@@ -8,11 +8,6 @@ export default class Login extends Component {
         this.login = this.login.bind(this);
     }
 
-    componentWillMount() {
-        if (window.performance.navigation.type == 1) {
-            browserHistory.push('/');
-        }
-    }
     login() {
         const {emit} = this.props;
         if (emit) {

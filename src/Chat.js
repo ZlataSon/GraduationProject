@@ -15,7 +15,8 @@ class Chat extends React.Component {
             opponent: "",
             opponentID: "",
             connections:props.connections,
-            gameInvite:{status:'', opponent:'', opponentID:''}
+            gameInvite:{status:'', opponent:'', opponentID:''},
+            activeInput: 'public'
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -30,17 +31,10 @@ class Chat extends React.Component {
     componentDidMount () {
 
         if (!this.props.user.name) {
-            //this.context.router.push('/');
             if (window.performance.navigation.type == 1) {
                 browserHistory.push('/');
             }
         }
-        // console.log('Component Chat will mount');
-        // console.dir(this.props);
-        // console.dir(this.state);
-        // if (this.props.user.name=='') console.log('************ NEED LOGIN **************');
-        // const path = `/`;
-        // browserHistory.push(path);
 
         this.state.socket.on("receive-message", (msg) => {
             const messages = this.state.messages;
@@ -131,8 +125,13 @@ class Chat extends React.Component {
     }
 
     pressIcon(icon) {
-        const text = document.getElementById("message").value;
-        document.getElementById("message").value = text + ' //'+icon+'// ';
+        if (this.state.activeInput == 'public') {
+            const text = document.getElementById("message").value;
+            document.getElementById("message").value = text + ' //' + icon + '// ';
+        } else if (this.state.activeInput == 'private') {
+            const text = document.getElementById("message-private").value;
+            document.getElementById("message-private").value = text + ' //' + icon + '// ';
+        }
     }
 
     /* Set the width of the side navigation to 300px */
@@ -146,6 +145,7 @@ class Chat extends React.Component {
 
     /* Set the width of the side navigation to 0 */
     closeNav() {
+        this.setState({activeInput:'public'});
         document.getElementById("mySidenav").style.width = "0";
     }
 
@@ -238,8 +238,8 @@ class Chat extends React.Component {
         return {__html: newText};
     }
 
-    viewSmileBox() {
-        this.setState({smilebox: !this.state.smilebox});
+    viewSmileBox(activeInput) {
+        this.setState({smilebox: !this.state.smilebox, activeInput});
     }
 
     pickUser() {
@@ -276,6 +276,12 @@ class Chat extends React.Component {
 
     handleChange(event) {
         this.setState({name: event.target.value});
+    }
+
+    onFocus(activeInput) {
+        console.log('on focus');
+        console.dir(activeInput);
+        this.setState({activeInput});
     }
 
     render() {
@@ -393,11 +399,11 @@ class Chat extends React.Component {
                         </div>
 
                         <footer>
-                            <textarea id="message-private" autoComplete="off"/>
+                            <textarea id="message-private" autoComplete="off" onFocus={this.onFocus.bind(this,'private')}/>
                             <a className="button" href="javascript:void(0)" onClick={this.submitMessagePrivate}>
                                 <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                             </a>
-                            <a className="button smile" href="javascript:void(0)" onClick={this.viewSmileBox} >
+                            <a className="button smile" href="javascript:void(0)" onClick={this.viewSmileBox.bind(this,'private')} >
                                 <i className="fa fa-smile-o" aria-hidden="true"> </i>
                             </a>
                         </footer>
@@ -496,11 +502,11 @@ class Chat extends React.Component {
                         <i className="em em-performing_arts" onClick={()=> this.pressIcon("em-performing_arts")}> </i>
                         <i className="em em-christmas_tree" onClick={()=> this.pressIcon("em-christmas_tree")}> </i>
                     </div>
-                    <textarea id="message" autoComplete="off"/>
+                    <textarea id="message" autoComplete="off" onFocus={this.onFocus.bind(this,'public')}/>
                     <a className="button" href="javascript:void(0)" onClick={() => this.submitMessage()}>
                         <i className="fa fa-paper-plane" aria-hidden="true"> </i>
                     </a>
-                    <a className="button smile" href="javascript:void(0)" onClick={() => this.viewSmileBox()} >
+                    <a className="button smile" href="javascript:void(0)" onClick={this.viewSmileBox.bind(this,'public')} >
                         <i className="fa fa-smile-o" aria-hidden="true"> </i>
                     </a>
 

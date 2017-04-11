@@ -19262,8 +19262,8 @@ var App = function (_Component) {
     _createClass(App, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            console.log('Mount App-component');
-            console.dir(window.location.hostname);
+            // console.log('Mount App-component');
+            // console.dir(window.location.hostname);
             //this.socket = io('http://localhost:3000');
             //this.socket = io('https://graduation-project.herokuapp.com');
             var host = '';
@@ -19314,12 +19314,6 @@ var App = function (_Component) {
             this.socket.emit(eventName, payload);
         }
     }, {
-        key: 'connect',
-        value: function connect() {}
-    }, {
-        key: 'disconnect',
-        value: function disconnect() {}
-    }, {
         key: 'updateConnection',
         value: function updateConnection(Connections) {
             console.log('updateConection');
@@ -19342,12 +19336,7 @@ var App = function (_Component) {
                 connections = _state.connections,
                 onlineCnt = _state.onlineCnt;
 
-            console.log('Render App');
-            console.dir(this.props.children);
-            console.dir(connections);
             var childrenWithProps = _react2.default.Children.map(children, function (child) {
-                console.log('App: maped children');
-                console.dir(child);
                 return _react2.default.cloneElement(child, {
                     emit: _this2.emit.bind(_this2),
                     user: _this2.getCurrentUser(),
@@ -19417,7 +19406,8 @@ var Chat = function (_React$Component) {
             opponent: "",
             opponentID: "",
             connections: props.connections,
-            gameInvite: { status: '', opponent: '', opponentID: '' }
+            gameInvite: { status: '', opponent: '', opponentID: '' },
+            activeInput: 'public'
         };
 
         _this.handleChange = _this.handleChange.bind(_this);
@@ -19436,17 +19426,10 @@ var Chat = function (_React$Component) {
             var _this2 = this;
 
             if (!this.props.user.name) {
-                //this.context.router.push('/');
                 if (window.performance.navigation.type == 1) {
                     _reactRouter.browserHistory.push('/');
                 }
             }
-            // console.log('Component Chat will mount');
-            // console.dir(this.props);
-            // console.dir(this.state);
-            // if (this.props.user.name=='') console.log('************ NEED LOGIN **************');
-            // const path = `/`;
-            // browserHistory.push(path);
 
             this.state.socket.on("receive-message", function (msg) {
                 var messages = _this2.state.messages;
@@ -19549,8 +19532,13 @@ var Chat = function (_React$Component) {
     }, {
         key: 'pressIcon',
         value: function pressIcon(icon) {
-            var text = document.getElementById("message").value;
-            document.getElementById("message").value = text + ' //' + icon + '// ';
+            if (this.state.activeInput == 'public') {
+                var text = document.getElementById("message").value;
+                document.getElementById("message").value = text + ' //' + icon + '// ';
+            } else if (this.state.activeInput == 'private') {
+                var _text = document.getElementById("message-private").value;
+                document.getElementById("message-private").value = _text + ' //' + icon + '// ';
+            }
         }
 
         /* Set the width of the side navigation to 300px */
@@ -19572,6 +19560,7 @@ var Chat = function (_React$Component) {
     }, {
         key: 'closeNav',
         value: function closeNav() {
+            this.setState({ activeInput: 'public' });
             document.getElementById("mySidenav").style.width = "0";
         }
     }, {
@@ -19582,8 +19571,8 @@ var Chat = function (_React$Component) {
         }
     }, {
         key: 'viewSmileBox',
-        value: function viewSmileBox() {
-            this.setState({ smilebox: !this.state.smilebox });
+        value: function viewSmileBox(activeInput) {
+            this.setState({ smilebox: !this.state.smilebox, activeInput: activeInput });
         }
     }, {
         key: 'pickUser',
@@ -19627,6 +19616,13 @@ var Chat = function (_React$Component) {
         key: 'handleChange',
         value: function handleChange(event) {
             this.setState({ name: event.target.value });
+        }
+    }, {
+        key: 'onFocus',
+        value: function onFocus(activeInput) {
+            console.log('on focus');
+            console.dir(activeInput);
+            this.setState({ activeInput: activeInput });
         }
     }, {
         key: 'render',
@@ -19862,7 +19858,7 @@ var Chat = function (_React$Component) {
                         _react2.default.createElement(
                             'footer',
                             null,
-                            _react2.default.createElement('textarea', { id: 'message-private', autoComplete: 'off' }),
+                            _react2.default.createElement('textarea', { id: 'message-private', autoComplete: 'off', onFocus: this.onFocus.bind(this, 'private') }),
                             _react2.default.createElement(
                                 'a',
                                 { className: 'button', href: 'javascript:void(0)', onClick: this.submitMessagePrivate },
@@ -19874,7 +19870,7 @@ var Chat = function (_React$Component) {
                             ),
                             _react2.default.createElement(
                                 'a',
-                                { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox },
+                                { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox.bind(this, 'private') },
                                 _react2.default.createElement(
                                     'i',
                                     { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
@@ -20468,7 +20464,7 @@ var Chat = function (_React$Component) {
                             ' '
                         )
                     ),
-                    _react2.default.createElement('textarea', { id: 'message', autoComplete: 'off' }),
+                    _react2.default.createElement('textarea', { id: 'message', autoComplete: 'off', onFocus: this.onFocus.bind(this, 'public') }),
                     _react2.default.createElement(
                         'a',
                         { className: 'button', href: 'javascript:void(0)', onClick: function onClick() {
@@ -20482,9 +20478,7 @@ var Chat = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'a',
-                        { className: 'button smile', href: 'javascript:void(0)', onClick: function onClick() {
-                                return _this3.viewSmileBox();
-                            } },
+                        { className: 'button smile', href: 'javascript:void(0)', onClick: this.viewSmileBox.bind(this, 'public') },
                         _react2.default.createElement(
                             'i',
                             { className: 'fa fa-smile-o', 'aria-hidden': 'true' },
@@ -20608,6 +20602,17 @@ var Game = function (_Component) {
     }
 
     _createClass(Game, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            console.log('did mount component Game');
+            console.dir(this.props);
+            if (!this.props.user.name) {
+                if (window.performance.navigation.type == 1) {
+                    _reactRouter.browserHistory.push('/');
+                }
+            }
+        }
+    }, {
         key: 'componentWillMount',
         value: function componentWillMount() {
             var _this2 = this;
